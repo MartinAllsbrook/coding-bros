@@ -1,7 +1,7 @@
 import GameBoard from "./modules/GameBoard.js";
 
 
-let board = new GameBoard(10, 10)
+let board = new GameBoard(15, 15)
 
 board.createBoard()
 board.addLetters()
