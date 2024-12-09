@@ -1,0 +1,4 @@
+-Create gameboard space in which letters are placed in different formations and then  filler letters in between
+
+-Object of gameboard, word, word arranger, and letter placer
+
