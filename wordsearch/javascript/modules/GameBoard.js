@@ -70,6 +70,44 @@ export default class GameBoard {
             
         }
     }
-        
+    
+    // Returns true if the word can be added to the grid, false otherwise
+    // Haven't tested this function yet
+    checkIfAvailable(word){
+        let x_pos = word.x;
+        let y_pos = word.y;
+        let empty = true;
 
+        for(let i = 0; i<word.word.length; i++){
+            // Check if the position to be tested is within the grid
+            if (x_pos >= this.width || y_pos >= this.height){
+                empty = false;
+                break;
+            }
+            
+            // Check if the position to be tested is already occupied
+            if(this.position_grid[x_pos][y_pos] == false){
+                empty = false;
+            }
+
+            // Increment the position based on the direction
+            [x_pos, y_pos] = this.getIncrementedPosition(x_pos, y_pos, word.direction);
+        }
+
+        return empty;
+    }
+
+    // Returns an array with the next position based on the direction
+    getIncrementedPosition(x, y, direction){
+        switch(direction){
+            case "horizontal":
+                return [x+1, y];
+            case "vertical":
+                return [x, y+1];
+            case "diagonal":
+                return [x+1, y+1];
+            default:
+                console.log("epic fail, " + direction + " is not a valid direction"); 
+        }
+    }
 }
