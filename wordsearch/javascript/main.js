@@ -12,6 +12,7 @@ let test_word_2 = new Word("Bro", 9, 9, "vertical");
 console.log(test_word);
 board.addLetters(test_word);
 board.addLetters(test_word_2);
+console.log(board.display_grid[1][1].innerHTML);
 // console.log('main.js loaded');
 
-// console.log(board.grid)
+console.log(board.position_grid)

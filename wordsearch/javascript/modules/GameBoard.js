@@ -2,7 +2,8 @@ export default class GameBoard {
     constructor(width, height) {
         this.width = width;
         this.height = height; 
-        this.grid = [];       
+        this.display_grid = [];
+        this.position_grid = [];       
     }
 
     createBoard() {
@@ -14,7 +15,9 @@ export default class GameBoard {
             row.id = "row" + y;
             gameboard.appendChild(row);
             // console.log("added row");
-            this.grid[y] = [];
+            this.display_grid[y] = [];
+            this.position_grid[y] = [];
+
             
             for(let x = 0; x<this.width; x++){
                 let column = document.createElement('div');
@@ -22,7 +25,8 @@ export default class GameBoard {
                 column.id = "row_" + y+ "_column" +x;
                 row.appendChild(column);
                 // console.log("added column");
-                this.grid[y][x] = column
+                this.display_grid[y][x] = column;
+                this.position_grid[y][x] = true;
             }
         }
     }
@@ -31,6 +35,8 @@ export default class GameBoard {
         // setting separate variables to track current x and y for each letter
         let x_pos = Word.x;
         let y_pos = Word.y;
+
+        // if this.display_grid[x_pos][y_pos].innerHTML != 
         
         for(let i =0; i<Word.word.length; i++){
 
@@ -38,20 +44,22 @@ export default class GameBoard {
             
             if (Word.direction == "horizontal"){
                 //adds letters by square in our grid, then moves one square to the right
-                this.grid[x_pos][y_pos].innerHTML = Word.word[i];
+                this.display_grid[x_pos][y_pos].innerHTML = Word.word[i];
+                this.position_grid[x_pos][y_pos] = false;
                 x_pos+=1;
             
             
             } else if(Word.direction == 'vertical'){
                 //adds letters by square in our grid, then moves one square down
-                this.grid[x_pos][y_pos].innerHTML = Word.word[i];
-                
+                this.display_grid[x_pos][y_pos].innerHTML = Word.word[i];
+                this.position_grid[x_pos][y_pos] = false;
                 y_pos+=1;
            
            
             } else if(Word.direction == 'diagonal'){
                 // adds letters by square in our grid, then movies one square up and one square to the right
-                this.grid[x_pos][y_pos].innerHTML = Word.word[i];
+                this.display_grid[x_pos][y_pos].innerHTML = Word.word[i];
+                this.position_grid[x_pos][y_pos] = false;
                 y_pos+=1;
                 x_pos-=1;   
             
