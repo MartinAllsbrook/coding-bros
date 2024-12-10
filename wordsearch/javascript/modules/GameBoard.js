@@ -64,7 +64,7 @@ export default class GameBoard {
                     this.display_grid[x_pos][y_pos].innerHTML = Word.word[i];
                     this.position_grid[x_pos][y_pos] = false;
                     y_pos+=1;
-                    x_pos-=1;   
+                    x_pos+=1;   
                 
                 
                 }  else{
