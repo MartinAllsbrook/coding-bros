@@ -59,7 +59,6 @@ export default class GameBoard {
     }
     
     // Returns true if the word can be added to the grid, false otherwise
-    // Haven't tested this function yet
     checkIfAvailable(word){
         let x_pos = word.x;
         let y_pos = word.y;
