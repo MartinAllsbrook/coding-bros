@@ -1,8 +1,8 @@
 #gameboard{
 
- /* display: flex; */
- width: fit-content;
- right:10%;
+    display: flex;
+    width: fit-content;
+    right:10%;
 }
 
 
