@@ -3,6 +3,9 @@ export default class Word {
         this.word = word;
         this.x = x;
         this.y = y;
+        
         this.direction = direction;
+    
+        this.length = word.length;
     }   
 }
