@@ -28,32 +28,30 @@ export default class GameBoard {
     }
 
     addLetters(Word) { 
+        // setting separate variables to track current x and y for each letter
         let x_pos = Word.x;
         let y_pos = Word.y;
         
         for(let i =0; i<Word.word.length; i++){
-            // setting separate variables to track current x and y for each letter
-            
-            // console.log(this.grid[x_pos][y_pos]);
-            console.log(i);
 
             //adding each letter to a particular square depending on the direction
             
             if (Word.direction == "horizontal"){
+                //adds letters by square in our grid, then moves one square to the right
                 this.grid[x_pos][y_pos].innerHTML = Word.word[i];
-                console.log("x position is " + x_pos + "y position is" + y_pos);
                 x_pos+=1;
             
             
             } else if(Word.direction == 'vertical'){
+                //adds letters by square in our grid, then moves one square down
                 this.grid[x_pos][y_pos].innerHTML = Word.word[i];
-                console.log("x position is " + x_pos + "y position is" + y_pos);
+                
                 y_pos+=1;
            
            
             } else if(Word.direction == 'diagonal'){
+                // adds letters by square in our grid, then movies one square up and one square to the right
                 this.grid[x_pos][y_pos].innerHTML = Word.word[i];
-                console.log("x position is " + x_pos + "y position is" + y_pos);
                 y_pos+=1;
                 x_pos-=1;   
             
