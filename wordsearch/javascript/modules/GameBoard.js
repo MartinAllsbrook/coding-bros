@@ -31,49 +31,30 @@ export default class GameBoard {
         }
     }
 
-    addLetters(Word) {
+    addLetters(word) {
+        // If row is not available, return, skipping the rest of the function
+        // ! = not, so if checkIfAvailable returns false, then the if statement is true
+        if(!this.checkIfAvailable(word)){
+            console.warn("No space for word: " + word.word);
+            return;
+        }
 
-        if(this.checkIfAvailable(Word) == true){
-            console.log("Generating " + Word.word);
+        console.log("Generating " + word.word);
+        
         // setting separate variables to track current x and y for each letter
-            let x_pos = Word.x;
-            let y_pos = Word.y;
+        let x_pos = word.x;
+        let y_pos = word.y;
 
-            // if this.display_grid[x_pos][y_pos].innerHTML != 
-            
-            for(let i =0; i<Word.word.length; i++){
+        // if this.display_grid[x_pos][y_pos].innerHTML != 
+        for(let i =0; i<word.word.length; i++){
 
-                //adding each letter to a particular square depending on the direction
-                
-                if (Word.direction == "horizontal"){
-                    //adds letters by square in our grid, then moves one square to the right
-                    this.display_grid[x_pos][y_pos].innerHTML = Word.word[i];
-                    this.position_grid[x_pos][y_pos] = false;
-                    x_pos+=1;
-                
-                
-                } else if(Word.direction == 'vertical'){
-                    //adds letters by square in our grid, then moves one square down
-                    this.display_grid[x_pos][y_pos].innerHTML = Word.word[i];
-                    this.position_grid[x_pos][y_pos] = false;
-                    y_pos+=1;
+            //adding each letter to a particular square depending on the direction
+            this.display_grid[x_pos][y_pos].innerHTML = word.word[i];
+            this.position_grid[x_pos][y_pos] = false;
+
+            // Increment the position based on the direction
+            [x_pos, y_pos] = this.getIncrementedPosition(x_pos, y_pos, word.direction);
             
-            
-                } else if(Word.direction == 'diagonal'){
-                    // adds letters by square in our grid, then movies one square up and one square to the right
-                    this.display_grid[x_pos][y_pos].innerHTML = Word.word[i];
-                    this.position_grid[x_pos][y_pos] = false;
-                    y_pos+=1;
-                    x_pos+=1;   
-                
-                
-                }  else{
-                    console.log("epic fail");
-                }
-                
-            }}
-        else{
-            console.log("Space not available")
         }
     }
     
