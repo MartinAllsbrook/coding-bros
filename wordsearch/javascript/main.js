@@ -8,11 +8,15 @@ let dictionary = new Dictionary()
 board.createBoard()
 
 let test_word = new Word(dictionary.getRandomWord(), 8, 2, "diagonal");
-let test_word_2 = new Word(dictionary.getRandomWord(), 11, 4, "vertical");
+
+let test_word_2 = new Word(dictionary.getRandomWord(), 14, 4, "vertical");
+let test_word_3 = new Word(dictionary.getRandomWord(), 11, 4, "vertical");
 
 console.log(test_word);
+console.log(test_word_2);
 board.addLetters(test_word);
 board.addLetters(test_word_2);
+board.addLetters(test_word_3);
 console.log(board.display_grid[1][1].innerHTML);
 // console.log('main.js loaded');
 
