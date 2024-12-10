@@ -1,10 +1,17 @@
 import GameBoard from "./modules/GameBoard.js";
+import Word from "./modules/Word.js";
 
-
-let board = new GameBoard(15, 15)
+let board = new GameBoard(13, 15)
 
 board.createBoard()
-board.addLetters()
-console.log('main.js loaded');
 
-console.log(board.grid)
+let test_word = new Word("Coder", 4, 4, "diagonal");
+
+let test_word_2 = new Word("Bro", 9, 9, "vertical");
+
+console.log(test_word);
+board.addLetters(test_word);
+board.addLetters(test_word_2);
+// console.log('main.js loaded');
+
+// console.log(board.grid)
