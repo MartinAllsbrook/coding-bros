@@ -6,18 +6,22 @@ export default class Cell {
         this.selected = false;
     }
 
-    clickCell() {
+    clickCell(wordTracker) {
         if (this.selected) {
-            this.deselect();
+            wordTracker.deselectCell(this)
         } else {
-            this.select();
+            this.select(wordTracker);
         }
     }
 
     // Selects the cell
-    select() {
-        this.selected = true;
-        this.element.classList.add('selected');
+    select(wordTracker) {
+        let selected = wordTracker.selectTile(this);
+
+        if (selected) {
+            this.selected = true;
+            this.element.classList.add('selected');
+        }
     }
 
     // Deselects the cell
