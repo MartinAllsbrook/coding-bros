@@ -1,5 +1,5 @@
 export default class Word {
-    constructor(word, x, y, direction) {
+    constructor(word, direction,  x, y) {
         this.word = word;
         this.x = x;
         this.y = y;
@@ -8,4 +8,6 @@ export default class Word {
     
         this.length = word.length;
     }   
+
+    
 }
