@@ -1,11 +1,13 @@
 import Cell from "./Cell.js";
+import WordTracker from "./WordTracker.js";
 
 export default class GameBoard {
     constructor(width, height) {
         this.width = width;
         this.height = height; 
         this.display_grid = [];
-        this.position_grid = [];       
+        this.position_grid = [];
+        this.wordTracker = new WordTracker();
     }
 
     createBoard() {
@@ -28,7 +30,7 @@ export default class GameBoard {
                 column.appendChild(row);
 
                 let cell = new Cell(x, y, row);
-                row.addEventListener('click', () => cell.clickCell());
+                row.addEventListener('click', () => cell.clickCell(this.wordTracker));
 
                 // console.log("added column");
                 this.display_grid[x][y] = row;
