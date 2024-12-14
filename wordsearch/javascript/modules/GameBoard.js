@@ -1,3 +1,5 @@
+import Cell from "./Cell.js";
+
 export default class GameBoard {
     constructor(width, height) {
         this.width = width;
@@ -24,6 +26,10 @@ export default class GameBoard {
                 row.className ="row"
                 row.id = "row_" + y+ "_column" +x;
                 column.appendChild(row);
+
+                let cell = new Cell(x, y, row);
+                row.addEventListener('click', () => cell.clickCell());
+
                 // console.log("added column");
                 this.display_grid[x][y] = row;
                 this.position_grid[x][y] = true;

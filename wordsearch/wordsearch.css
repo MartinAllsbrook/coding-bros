@@ -1,18 +1,13 @@
 #gameboard{
-
     display: flex;
     width: fit-content;
     right:10%;
 }
 
-
-
-
-
 .row{
     width: 3rem;
     height: 3rem;
-    
+
     border: 1px solid black;
 
     font-weight: 700;
@@ -22,6 +17,19 @@
     justify-content: center;
     align-items: center;
     
+    &:hover {
+        background-color: grey;
+        transition: background-color 0.3s;
+    }
+
+    &:active {
+        background-color: red;
+        transition: background-color 0s;
+    }
+}
+
+.selected{
+    background-color: red;
 }
 
 .column{
