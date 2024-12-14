@@ -74,7 +74,7 @@ export default class GameBoard {
 
         for(let i = 0; i<word.word.length; i++){
             // Check if the position to be tested is within the grid
-            if (x_pos >= this.width || y_pos >= this.height){
+            if (x_pos >= this.width || y_pos >= this.height || x_pos < 0 || y_pos < 0){
                 empty = false;
                 break;
             }
