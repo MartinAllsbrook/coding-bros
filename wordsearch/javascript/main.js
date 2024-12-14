@@ -2,10 +2,38 @@ import GameBoard from "./modules/GameBoard.js";
 import Word from "./modules/Word.js";
 import Dictionary from "./modules/Dictionary.js";
 
-let board = new GameBoard(13, 15)
-let dictionary = new Dictionary()
 
+
+
+let board = new GameBoard(13, 15);
+let dictionary = new Dictionary();
+
+// initialize the amount of words we are adding
+let num_words = 15;
+
+// word list for the words we will be adding to the board
+
+let words_to_add = [];
+
+// display the board by using this function
 board.createBoard()
+
+// pick random words and add to the array that we created above
+for(let i = 0; i<num_words; i++){
+    // initialize x position and y position of each word based on dimensions of gameboard
+    let x_pos = getRandomInt(0, board.width);
+    let y_pos = getRandomInt(0, board.height);
+    let current_word = new Word(dictionary.getRandomWord(), "vertical", x_pos, y_pos);
+    words_to_add[i] = current_word;
+    console.log("Added word at index " + i );
+    console.log(words_to_add);
+    // board.addLetters(current_word);
+    
+
+}
+
+// create our gamboard to be displayed
+
 
 let test_word = new Word(dictionary.getRandomWord(), 8, 2, "diagonal");
 
@@ -21,4 +49,6 @@ console.log(board.display_grid[1][1].innerHTML);
 // console.log('main.js loaded');
 
 console.log(board.position_grid)
+console.log("Random Int is  " + getRandomInt(10, 50) )
+console.log(words_to_add)
 
