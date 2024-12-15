@@ -2,10 +2,16 @@ export default class WordTracker {
     constructor() {
         this.words = [];
         this.selectedCells = [];
+
+        this.wordList = document.getElementById("wordList");
     }
     
     addWord(word) {
         this.words.push(word);
+
+        let listItem = document.createElement('li');
+        listItem.textContent = word.word;
+        this.wordList.appendChild(listItem);
     }
     
     getWords() {
