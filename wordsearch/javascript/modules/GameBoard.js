@@ -119,20 +119,16 @@ export default class GameBoard {
         const dic = new Dictionary()
         // nested for loop to hit each x and y coordinate
         for (let x= 0; x<this.width; x++){
-            
             for(let y=0; y<this.height; y++){
                 // console.log(this.position_grid[x][y]);
                 // position grid values are boolean so this doesn't need condition
                 if(this.position_grid[x][y]){
-                    
                     this.display_grid[x][y].innerHTML = dic.getRandomCharacter() 
                     this.position_grid[x][y] = false;
-                    
-
+                    this.display_grid[x][y].classList.add("fillerHighlight");
                 }
             }
         }
-
     }
 }
 

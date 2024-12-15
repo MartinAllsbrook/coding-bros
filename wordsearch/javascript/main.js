@@ -27,7 +27,7 @@ for(let i = 0; i<num_words; i++){
     // initialize x position and y position of each word based on dimensions of gameboard
     let x_pos = getRandomInt(0, board.width);
     let y_pos = getRandomInt(0, board.height);
-    let current_word = new Word(dictionary.getRandomWord(), "vertical", x_pos, y_pos);
+    let current_word = new Word(dictionary.getRandomWord(), dictionary.getRandomDirection(), x_pos, y_pos);
     if(board.checkIfAvailable(current_word) == true){
         board.addLetters(current_word);
         word_counter -= 1;
@@ -35,7 +35,7 @@ for(let i = 0; i<num_words; i++){
     }
 }
 
-board.addFiller(dictionary.getRandomCharacter());
+board.addFiller();
     
 console.log(board.position_grid); 
 

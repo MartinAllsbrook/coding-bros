@@ -18,13 +18,21 @@ export default class Dictionary {
             'WIFI',
             'ETHERNET'
         ];
+
+        this.directions = ['horizontal', 'vertical', 'diagonal'];
         
-        this.characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        this.characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        //this.characters = 'a';
     }
     // Returns a random word from the words array
     getRandomWord() {
         const randomIndex = Math.floor(Math.random() * this.words.length);
         return this.words[randomIndex];
+    }
+
+    getRandomDirection() {
+        const randomIndex = Math.floor(Math.random() * this.directions.length);
+        return this.directions[randomIndex];
     }
 
     // Returns a random character from the characters string

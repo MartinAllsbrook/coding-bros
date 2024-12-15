@@ -4,6 +4,10 @@
     right:10%;
 }
 
+.fillerHighlight{
+    background-color: rgb(255, 255, 206);
+}
+
 .row{
     width: 3rem;
     height: 3rem;
@@ -39,3 +43,4 @@
     align-items: center;
     width: fit-content;
 }
+
