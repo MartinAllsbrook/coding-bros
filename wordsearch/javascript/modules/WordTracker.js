@@ -4,6 +4,9 @@ export default class WordTracker {
         this.selectedCells = [];
 
         this.wordList = document.getElementById("wordList");
+        const trySelectButton = document.getElementById("trySelectionButton");
+
+        trySelectButton.addEventListener('click', () => this.trySelection());
     }
     
     addWord(word) {
@@ -64,5 +67,25 @@ export default class WordTracker {
 
         // clear the selectedCells array
         this.selectedCells = [];
+    }
+
+    trySelection(){
+        console.log("Trying selection");
+        let selectedWord = "";
+        this.selectedCells.forEach(cell => {
+            selectedWord += cell.element.textContent;
+        });
+
+        this.words.forEach(word => {
+            if (word.word === selectedWord) {
+                console.log("Found word: " + selectedWord);
+                // word.found = true;
+                // this.selectedCells.forEach(cell => {
+                //     cell.element.classList.add('found');
+                // });
+            }
+        });
+
+        this.deselectCell();
     }
 }
