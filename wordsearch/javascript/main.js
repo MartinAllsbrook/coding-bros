@@ -34,6 +34,8 @@ for(let i = 0; i<num_words; i++){
         console.log("Added word to the board")
     }
 }
+
+board.addFiller(dictionary.getRandomCharacter());
     
-    
+console.log(board.position_grid); 
 
