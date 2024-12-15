@@ -33,29 +33,7 @@ for(let i = 0; i<num_words; i++){
         word_counter -= 1;
         console.log("Added word to the board")
     }
-    
-    // board.addLetters(current_word);
-    
-
 }
-
-// create our gamboard to be displayed
-
-
-let test_word = new Word(dictionary.getRandomWord(), 8, 2, "diagonal");
-
-let test_word_2 = new Word(dictionary.getRandomWord(), 14, 4, "vertical");
-let test_word_3 = new Word(dictionary.getRandomWord(), 11, 4, "vertical");
-
-console.log(test_word);
-console.log(test_word_2);
-board.addLetters(test_word);
-board.addLetters(test_word_2);
-board.addLetters(test_word_3);
-console.log(board.display_grid[1][1].innerHTML);
-// console.log('main.js loaded');
-
-console.log(board.position_grid)
-console.log("Random Int is  " + getRandomInt(10, 50) )
-console.log(words_to_add)
+    
+    
 
