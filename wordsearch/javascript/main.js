@@ -29,7 +29,7 @@ for(let i = 0; i<num_words; i++){
     let y_pos = getRandomInt(0, board.height);
     let current_word = new Word(dictionary.getRandomWord(), dictionary.getRandomDirection(), x_pos, y_pos);
     if(board.checkIfAvailable(current_word) == true){
-        board.addLetters(current_word);
+        board.addWord(current_word);
         word_counter -= 1;
         console.log("Added word to the board")
     }

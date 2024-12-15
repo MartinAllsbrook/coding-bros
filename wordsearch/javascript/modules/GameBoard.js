@@ -39,7 +39,7 @@ export default class GameBoard {
         }
     }
 
-    addLetters(word) {
+    addWord(word) {
         // If row is not available, return, skipping the rest of the function
         // ! = not, so if checkIfAvailable returns false, then the if statement is true
         try
