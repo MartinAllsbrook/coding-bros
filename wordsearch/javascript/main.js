@@ -1,6 +1,7 @@
 import GameBoard from "./modules/GameBoard.js";
 import Word from "./modules/Word.js";
 import Dictionary from "./modules/Dictionary.js";
+import WordTracker from "./modules/WordTracker.js";
 
 
 
@@ -12,13 +13,10 @@ let dictionary = new Dictionary();
 const num_words = 15;
 
 // word list for the words we will be adding to the board
-
 let words_to_add = [];
 
 // display the board by using this function
 board.createBoard()
-
-
 
 let word_counter = num_words;
 
@@ -39,3 +37,8 @@ board.addFiller();
     
 console.log(board.position_grid); 
 
+// Print all letter positiuons to test
+board.wordTracker.words.forEach(word => {
+    console.log(word.word);
+    console.log(word.letterPositions);
+});

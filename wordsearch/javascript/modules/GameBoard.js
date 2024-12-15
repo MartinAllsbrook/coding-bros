@@ -43,13 +43,24 @@ export default class GameBoard {
         // If row is not available, return, skipping the rest of the function
         // ! = not, so if checkIfAvailable returns false, then the if statement is true
         try
-        {if(!this.checkIfAvailable(word)){
-            console.warn("No space for word: " + word.word);
-            return;
-        }
+        {
+            if(!this.checkIfAvailable(word)){
+                console.error("No space for word: " + word.word);
+                return;
+            }
 
-        // console.log("Generating " + word.word);
-        
+            this.wordTracker.addWord(word);
+
+            this.addLetters(word);
+        }
+        catch(err){
+            console.log(err);
+            console.log("Error occured at "+ word.word);
+
+        }
+    }
+
+    addLetters(word){
         // setting separate variables to track current x and y for each letter
         let x_pos = word.x;
         let y_pos = word.y;
@@ -61,15 +72,12 @@ export default class GameBoard {
             this.display_grid[x_pos][y_pos].innerHTML = word.word[i];
             this.position_grid[x_pos][y_pos] = false;
 
+            // Add the position of the letter to the word object
+            word.addLetterPosition(x_pos, y_pos);
+
             // Increment the position based on the direction
             [x_pos, y_pos] = this.getIncrementedPosition(x_pos, y_pos, word.direction);
             
-        }
-    }
-        catch(err){
-            console.log(err);
-            console.log("Error occured at "+ word.word);
-
         }
     }
     
