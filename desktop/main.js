@@ -57,21 +57,19 @@ const secondWindow = document.getElementsByClassName('window-two')[0];
 const a = 1;
 const b = 2;
 let myLuchadora = a > b;
-let trueButton = false
+let trueButton = false;
 
-console.log(trueButton)
+console.log(trueButton);
 
-openWindow.addEventListener('click', 
-    function() { 
-    secondWindow.style.display = "block";
-    openWindow.className = 'open-folder open';
-    trueButton = false
+openWindow.addEventListener('click', function() {
+
+    if (trueButton === true) {
+        secondWindow.style.display = "none";
+        openWindow.className = 'open-folder close';
+        trueButton = false;
+    } else { 
+        secondWindow.style.display = "block";
+        openWindow.className = 'open-folder open';
+        trueButton = true;
+    }
 });
-
-if (trueButton = true) {
-    console.log("I do love true button!");
-} 
-
-else { 
-    console.log("I do not love truebutton!");
-}
