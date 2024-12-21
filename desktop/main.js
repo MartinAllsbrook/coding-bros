@@ -54,12 +54,24 @@ unchangeColor.addEventListener('click', function() {
 
 const openWindow = document.getElementsByClassName('open-folder')[0];
 const secondWindow = document.getElementsByClassName('window-two')[0];
+const a = 1;
+const b = 2;
+let myLuchadora = a > b;
+let trueButton = false
 
-openWindow.addEventListener('click', function() { 
+console.log(trueButton)
+
+openWindow.addEventListener('click', 
+    function() { 
     secondWindow.style.display = "block";
-});
-
-
-openWindow.addEventListener('click', function() { 
     openWindow.className = 'open-folder open';
+    trueButton = false
 });
+
+if (trueButton = true) {
+    console.log("I do love true button!");
+} 
+
+else { 
+    console.log("I do not love truebutton!");
+}

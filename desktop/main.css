@@ -22,7 +22,7 @@
 }
 
 .open-folder {
-    background-image: url('folder.png');
+    background-image: url('images/closed-folder.png');
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -33,5 +33,5 @@
 
 
 .open-folder.open {
-    background-image: url('folder-open.png');
+    background-image: url('images/open-folder.png');
 }
