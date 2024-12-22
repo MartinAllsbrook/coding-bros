@@ -1,14 +1,38 @@
 // Start tracking mouse position
 let x, y;
 const logMousePosition = false;
-document.addEventListener('mousemove', (event) => {
-    x = event.clientX;
-    y = event.clientY;
-  
-    if (logMousePosition)
-        console.log('Mouse position:', x, y);
+const secondWindow = document.getElementsByClassName('window-two')[0];
+
+function moveWindowToPosition (x,y) {
+    secondWindow.style.left = x + 'px';
+    secondWindow.style.top = y + 'px';
+};
+
+let windowClickTracker = false
+
+secondWindow.addEventListener('mousedown', (event) => {
+    windowClickTracker = true;
 });
 
+secondWindow.addEventListener('mouseup', (event) => {
+    windowClickTracker = false;
+});
+
+
+    document.addEventListener('mousemove', (event) => {
+        if (windowClickTracker === true) {
+            x = event.clientX;
+        y = event.clientY;
+
+        moveWindowToPosition(x, y);
+        if (logMousePosition)
+            console.log('Mouse position:', x, y);
+        }
+        else {
+            console.log('nope');
+        }
+    });
+    
 
 testInnerWidth();
 
@@ -29,12 +53,11 @@ function testInnerWidth() {
 
 
 const openWindow = document.getElementsByClassName('open-folder')[0];
-const secondWindow = document.getElementsByClassName('window-two')[0];
 const folderBackground = document.getElementsByClassName('folder-bg')[0];
 let trueButton = false;
 
 openWindow.addEventListener('click', function() {
-
+console.log('clicked');
     if (trueButton === true) {
         secondWindow.style.display = "none";
         folderBackground.className = 'folder-bg close';
