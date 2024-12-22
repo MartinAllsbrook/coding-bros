@@ -1,11 +1,35 @@
+const openWindow = document.getElementsByClassName('open-folder')[0];
+const folderBackground = document.getElementsByClassName('folder-bg')[0];
+let trueButton = false;
+
+openWindow.addEventListener('click', function() {
+console.log('clicked');
+    if (trueButton === true) {
+        secondWindow.style.display = "none";
+        folderBackground.className = 'folder-bg close';
+        trueButton = false;
+    } else { 
+        secondWindow.style.display = "block";
+        folderBackground.className = 'folder-bg open';
+        trueButton = true;
+    }
+});
+
 // Start tracking mouse position
 let x, y;
 const logMousePosition = false;
 const secondWindow = document.getElementsByClassName('window-two')[0];
+let windowWidth = secondWindow.clientWidth;
+let windowHeight = secondWindow.clientHeight;
+let yOffset = windowWidth / 2;
+let xOffset = windowHeight / 2;
+let newX = x - xOffset;
+let newY = y - yOffset; 
 
-function moveWindowToPosition (x,y) {
-    secondWindow.style.left = x + 'px';
-    secondWindow.style.top = y + 'px';
+function moveWindowToPosition (newX,newY) {
+    secondWindow.style.left = newX +'px';
+    secondWindow.style.top = newY + 'px';
+
 };
 
 let windowClickTracker = false
@@ -22,8 +46,8 @@ secondWindow.addEventListener('mouseup', (event) => {
     document.addEventListener('mousemove', (event) => {
         if (windowClickTracker === true) {
             x = event.clientX;
-        y = event.clientY;
-
+            y = event.clientY;
+            console.log(windowWidth);
         moveWindowToPosition(x, y);
         if (logMousePosition)
             console.log('Mouse position:', x, y);
@@ -52,19 +76,3 @@ function testInnerWidth() {
 }
 
 
-const openWindow = document.getElementsByClassName('open-folder')[0];
-const folderBackground = document.getElementsByClassName('folder-bg')[0];
-let trueButton = false;
-
-openWindow.addEventListener('click', function() {
-console.log('clicked');
-    if (trueButton === true) {
-        secondWindow.style.display = "none";
-        folderBackground.className = 'folder-bg close';
-        trueButton = false;
-    } else { 
-        secondWindow.style.display = "block";
-        folderBackground.className = 'folder-bg open';
-        trueButton = true;
-    }
-});
