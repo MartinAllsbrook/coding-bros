@@ -1,4 +1,16 @@
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+// Create Loader
+const loader = new GLTFLoader();
+
+loader.load( './models/monkeyHead.gltf', function ( gltf ) {
+	scene.add( gltf.scene );
+    console.log( gltf );
+    console.log(gltf.scene);
+}, undefined, function ( error ) {
+	console.error( error );
+});
 
 // Materials
 let mp_green = {
@@ -40,6 +52,7 @@ scene.add( cube2 );
 
 const material3 = new THREE.MeshMatcapMaterial( mp_green );
 const cube3 = new THREE.Mesh( geometry, material3 );
+cube3.position.y = 2;
 scene.add( cube3 );
 // Create a directional light
 const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
