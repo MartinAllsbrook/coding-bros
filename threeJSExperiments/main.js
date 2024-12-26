@@ -1,10 +1,15 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
+
 // Create Loader
 const loader = new GLTFLoader();
+
+// List of objects that should look at the cursor
+let objectsToLookAtCursor = [];
+
 let suzzane;
-loadObjectFromFile('Suzanne', './models/monkeyHead.gltf');
+loadObjectFromFile('Suzanne', './models/monkeyHead.gltf', false, testCallback);
 
 // Materials
 let mp_green = {
@@ -70,44 +75,34 @@ function animate() {
 function lookAtScreenPos(object, x, y){
     const windowHalfX = window.innerWidth / 2;
     const windowHalfY = window.innerHeight / 2;
-    x = (x - windowHalfX) / (windowHalfX / 5);
-    y = -(y - windowHalfY) / (windowHalfY / 5);
+    x = (x - windowHalfX) / (windowHalfX / 10);
+    y = -(y - windowHalfY) / (windowHalfY / 10); // This /10 is impersice I wonder if there's a better weay to do it
 
-    object.lookAt(x, y, 10);
+    const objectPosition = object.position; 
+    const cursorPosition = new THREE.Vector3(x, y, 5);
+
+    const lookPosition = cursorPosition.sub(objectPosition);
+
+    object.lookAt(lookPosition);
 }
 
-function loadObjectFromFile(objectName, filePath, addObjectToScene = true) {
+function loadObjectFromFile(objectName, filePath, addObjectToScene = true, callback = null) {
     let loadedObject;
 
     loader.load(filePath, 
     (gltf) => { 
         // Access the loaded model here
-        const gltfScene = gltf.scene; 
-        console.log(gltf.scene);
-
+        const gltfScene = gltf.scene;
 
         if (addObjectToScene)
             scene.add(gltfScene); 
     
         // Access specific objects by name
-        loadedObject = gltf.scene.getObjectByName(objectName); 
-        console.log(loadedObject);
-        if (loadedObject != null) {
-            console.log('Object with name: ' + objectName + ' found');
-        } else {
-            console.error('Object with name: ' + objectName + 'not found');
-        }
-        console.log(loadedObject);
-        suzzane = loadedObject;
+        loadedObject = gltf.scene.getObjectByName(objectName);
         
-        document.addEventListener('mousemove', (event) => {
-            let x = event.clientX;
-            let y = event.clientY;
-            // console.log(x, y);
-        
-            lookAtScreenPos(suzzane, x, y);
-        });
 
+        if (callback != null)
+            callback(loadedObject);
     }, 
     (xhr) => {
         // Optional: Progress callback
@@ -117,6 +112,44 @@ function loadObjectFromFile(objectName, filePath, addObjectToScene = true) {
         // Optional: Error callback
         console.error('An error happened', error);
     });
+}
+
+function testCallback(object){
+    const grid = createGrid(object, 5, 2);
+    const children = grid.children;
+
+    children.forEach(child => {
+        objectsToLookAtCursor.push(child);
+    });
+
+    // let objectDuplicate = object.clone();
+
+    // scene.add(object);
+    // objectsToLookAtCursor.push(object);
+    // object.position.x = -2;
+
+    // scene.add(objectDuplicate);
+    // objectsToLookAtCursor.push(objectDuplicate);
+}
+
+function createGrid(object, size, spacing) {
+    const grid = new THREE.Group();
+    const halfSize = (size - 1) / 2;
+
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            const objectClone = object.clone();
+            objectClone.position.set(
+                (i - halfSize) * spacing,
+                (j - halfSize) * spacing,
+                0
+            );
+            grid.add(objectClone);
+        }
+    }
+
+    scene.add(grid);
+    return grid;
 }
 
 // ### Event Listeners ###
@@ -129,10 +162,14 @@ window.addEventListener('resize', () => {
 });
 
 // Event listener for mouse movement
-// document.addEventListener('mousemove', (event) => {
-//     let x = event.clientX;
-//     let y = event.clientY;
-//     // console.log(x, y);
+document.addEventListener('mousemove', (event) => {
+    let x = event.clientX;
+    let y = event.clientY;
+    // console.log(x, y);
 
-//     lookAtScreenPos(suzzane, x, y);
-// });
+    objectsToLookAtCursor.forEach((object) => {
+        lookAtScreenPos(object, x, y);
+    });
+
+    
+});
