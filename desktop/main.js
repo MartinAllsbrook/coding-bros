@@ -1,9 +1,10 @@
 const openWindow = document.getElementsByClassName('open-folder')[0];
 const folderBackground = document.getElementsByClassName('folder-bg')[0];
 let trueButton = false;
+const littleClose = document.getElementsByClassName('little_close')[0];
 
 openWindow.addEventListener('click', function() {
-console.log('clicked');
+
     if (trueButton === true) {
         secondWindow.style.display = "none";
         folderBackground.className = 'folder-bg close';
@@ -13,6 +14,14 @@ console.log('clicked');
         folderBackground.className = 'folder-bg open';
         trueButton = true;
     }
+});
+
+littleClose.addEventListener('click', function() {
+console.log('clicked');
+if (trueButton === true) {
+    secondWindow.style.display = "none";
+    folderBackground.className = 'folder-bg close';
+    trueButton = false;}
 });
 
 // Start tracking mouse position
