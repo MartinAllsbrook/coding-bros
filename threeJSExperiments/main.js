@@ -3,14 +3,8 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 // Create Loader
 const loader = new GLTFLoader();
-
-loader.load( './models/monkeyHead.gltf', function ( gltf ) {
-	scene.add( gltf.scene );
-    console.log( gltf );
-    console.log(gltf.scene);
-}, undefined, function ( error ) {
-	console.error( error );
-});
+let suzzane;
+loadObjectFromFile('Suzanne', './models/monkeyHead.gltf');
 
 // Materials
 let mp_green = {
@@ -50,6 +44,8 @@ const cube2 = new THREE.Mesh( geometry, material2 );
 cube2.position.x = -2;
 scene.add( cube2 );
 
+console.log(cube2);
+
 const material3 = new THREE.MeshMatcapMaterial( mp_green );
 const cube3 = new THREE.Mesh( geometry, material3 );
 cube3.position.y = 2;
@@ -74,10 +70,53 @@ function animate() {
 function lookAtScreenPos(object, x, y){
     const windowHalfX = window.innerWidth / 2;
     const windowHalfY = window.innerHeight / 2;
-    x = -(x - windowHalfX) / (windowHalfX / 5);
-    y = (y - windowHalfY) / (windowHalfY / 5);
+    x = (x - windowHalfX) / (windowHalfX / 5);
+    y = -(y - windowHalfY) / (windowHalfY / 5);
 
-    object.lookAt(x, y, -10);
+    object.lookAt(x, y, 10);
+}
+
+function loadObjectFromFile(objectName, filePath, addObjectToScene = true) {
+    let loadedObject;
+
+    loader.load(filePath, 
+    (gltf) => { 
+        // Access the loaded model here
+        const gltfScene = gltf.scene; 
+        console.log(gltf.scene);
+
+
+        if (addObjectToScene)
+            scene.add(gltfScene); 
+    
+        // Access specific objects by name
+        loadedObject = gltf.scene.getObjectByName(objectName); 
+        console.log(loadedObject);
+        if (loadedObject != null) {
+            console.log('Object with name: ' + objectName + ' found');
+        } else {
+            console.error('Object with name: ' + objectName + 'not found');
+        }
+        console.log(loadedObject);
+        suzzane = loadedObject;
+        
+        document.addEventListener('mousemove', (event) => {
+            let x = event.clientX;
+            let y = event.clientY;
+            // console.log(x, y);
+        
+            lookAtScreenPos(suzzane, x, y);
+        });
+
+    }, 
+    (xhr) => {
+        // Optional: Progress callback
+        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+    }, 
+    (error) => {
+        // Optional: Error callback
+        console.error('An error happened', error);
+    });
 }
 
 // ### Event Listeners ###
@@ -90,10 +129,10 @@ window.addEventListener('resize', () => {
 });
 
 // Event listener for mouse movement
-document.addEventListener('mousemove', (event) => {
-    let x = event.clientX;
-    let y = event.clientY;
-    // console.log(x, y);
+// document.addEventListener('mousemove', (event) => {
+//     let x = event.clientX;
+//     let y = event.clientY;
+//     // console.log(x, y);
 
-    lookAtScreenPos(cube3, x, y);
-});
+//     lookAtScreenPos(suzzane, x, y);
+// });
