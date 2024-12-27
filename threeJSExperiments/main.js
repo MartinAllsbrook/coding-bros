@@ -11,6 +11,12 @@ let objectsToLookAtCursor = [];
 let suzzane;
 loadObjectFromFile('Suzanne', './models/monkeyHead.gltf', false, testCallback);
 
+// color test
+let color1 = new THREE.Color(0xff0000);
+let color2 = new THREE.Color(0x00ff00);
+let color3 = new THREE.Color(0x0000ff);
+
+
 // Materials
 let mp_green = {
     color: 0x00ff00,
@@ -21,6 +27,10 @@ let mp_blue = {
 let mp_red = {
     color: 0xff0000,
 };
+
+let mp_default = {
+    color: color3,
+}
 
 // Create scene 
 const scene = new THREE.Scene();
@@ -38,45 +48,30 @@ document.body.appendChild( renderer.domElement );
 // Basic Box Geometry
 const geometry = new THREE.BoxGeometry( 1, 1, 1 );
 
-// Green Matcap Material cube
-const material = new THREE.MeshPhongMaterial( mp_red );
-const cube = new THREE.Mesh( geometry, material );
-cube.position.x = 2;
-scene.add( cube );
-
-const material2 = new THREE.MeshPhysicalMaterial( mp_blue );
-const cube2 = new THREE.Mesh( geometry, material2 );
-cube2.position.x = -2;
-scene.add( cube2 );
-
-console.log(cube2);
-
-const material3 = new THREE.MeshMatcapMaterial( mp_green );
-const cube3 = new THREE.Mesh( geometry, material3 );
-cube3.position.y = 2;
-scene.add( cube3 );
 // Create a directional light
-const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
 scene.add( directionalLight );
+
+const ambientLight = new THREE.AmbientLight( 0x404040, 1 ); // soft white light scene.add( light );
+scene.add( ambientLight );
+
+// Little testing function lol
+// testingCubes();
 
 // ### Functions ###
 
 // Basic animation function for the cube 
 function animate() {
-	cube.rotation.x += 0.01;
-	cube.rotation.y += 0.01;
-
-    cube2.rotation.x -= 0.01;
-	cube2.rotation.y -= 0.01;
-
 	renderer.render( scene, camera );
 }
 
 function lookAtScreenPos(object, x, y){
+    const divisor = 125;
+
     const windowHalfX = window.innerWidth / 2;
     const windowHalfY = window.innerHeight / 2;
-    x = (x - windowHalfX) / (windowHalfX / 10);
-    y = -(y - windowHalfY) / (windowHalfY / 10); // This /10 is impersice I wonder if there's a better weay to do it
+    x = (x - windowHalfX) / divisor;
+    y = -(y - windowHalfY) / divisor; // This /10 is impersice I wonder if there's a better weay to do it
 
     const objectPosition = object.position; 
     const cursorPosition = new THREE.Vector3(x, y, 5);
@@ -115,7 +110,9 @@ function loadObjectFromFile(objectName, filePath, addObjectToScene = true, callb
 }
 
 function testCallback(object){
-    const grid = createGrid(object, 5, 2);
+    // object.material = new THREE.MeshPhysicalMaterial( mp_default );
+
+    const grid = createGrid(object, 5, 2, true, color1, color2, color3);
     const children = grid.children;
 
     children.forEach(child => {
@@ -132,7 +129,7 @@ function testCallback(object){
     // objectsToLookAtCursor.push(objectDuplicate);
 }
 
-function createGrid(object, size, spacing) {
+function createGrid(object, size, spacing, colorize = false, color1, color2, color3) {
     const grid = new THREE.Group();
     const halfSize = (size - 1) / 2;
 
@@ -144,12 +141,41 @@ function createGrid(object, size, spacing) {
                 (j - halfSize) * spacing,
                 0
             );
+
+            // Colorization
+            if (colorize) {
+                const iPercent = i / (size * 2);
+                const jPercent = j / (size * 2);
+
+                let color =  color3.lerp(color2, iPercent);
+                color = color.lerp(color1, jPercent);
+                
+                objectClone.material = new THREE.MeshPhysicalMaterial({color: color});
+            }
+
             grid.add(objectClone);
         }
     }
 
     scene.add(grid);
     return grid;
+}
+
+function testingCubes(){
+    const material = new THREE.MeshPhongMaterial( mp_red );
+    const cube = new THREE.Mesh( geometry, material );
+    cube.position.x = 2;
+    scene.add( cube );
+
+    const material2 = new THREE.MeshPhysicalMaterial( mp_blue );
+    const cube2 = new THREE.Mesh( geometry, material2 );
+    cube2.position.x = -2;
+    scene.add( cube2 );
+
+    const material3 = new THREE.MeshMatcapMaterial( mp_green );
+    const cube3 = new THREE.Mesh( geometry, material3 );
+    cube3.position.y = 2;
+    scene.add( cube3 );
 }
 
 // ### Event Listeners ###
