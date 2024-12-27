@@ -9,7 +9,7 @@ const loader = new GLTFLoader();
 let objectsToLookAtCursor = [];
 
 let suzzane;
-loadObjectFromFile('Suzanne', './models/monkeyHead.gltf', false, testCallback);
+loadObjectFromFile('Suzanne', './models/texturedHead.gltf', false, testCallback);
 
 // color test
 let color1 = new THREE.Color(0xff0000);
@@ -45,14 +45,19 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setAnimationLoop( animate ); 
 document.body.appendChild( renderer.domElement );
 
+renderer.setClearColor(0x000000, 0); // The second argument is the alpha value (0 for fully transparent)
+
 // Basic Box Geometry
 const geometry = new THREE.BoxGeometry( 1, 1, 1 );
 
 // Create a directional light
-const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+const directionalLight = new THREE.DirectionalLight( 0xffffff, 2 );
+const directionalLightTarget = directionalLight.target;
 scene.add( directionalLight );
+scene.add( directionalLightTarget );   
+directionalLightTarget.position.set(1, -1, -1);
 
-const ambientLight = new THREE.AmbientLight( 0x404040, 1 ); // soft white light scene.add( light );
+const ambientLight = new THREE.AmbientLight( 0x404040, 2 ); // soft white light scene.add( light );
 scene.add( ambientLight );
 
 // Little testing function lol
@@ -112,7 +117,7 @@ function loadObjectFromFile(objectName, filePath, addObjectToScene = true, callb
 function testCallback(object){
     // object.material = new THREE.MeshPhysicalMaterial( mp_default );
 
-    const grid = createGrid(object, 5, 2, true, color1, color2, color3);
+    const grid = createGrid(object, 5, 2, false, color1, color2, color3);
     const children = grid.children;
 
     children.forEach(child => {
