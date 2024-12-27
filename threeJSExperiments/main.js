@@ -60,6 +60,11 @@ directionalLightTarget.position.set(1, -1, -1);
 const ambientLight = new THREE.AmbientLight( 0x404040, 2 ); // soft white light scene.add( light );
 scene.add( ambientLight );
 
+const debugSphereGeometry = new THREE.SphereGeometry(0.1, 32, 32);
+const debugSphereMaterial = new THREE.MeshPhysicalMaterial({color: 0xff0000});
+const debugSphere = new THREE.Mesh(debugSphereGeometry, debugSphereMaterial);
+scene.add(debugSphere);
+
 // Little testing function lol
 // testingCubes();
 
@@ -80,6 +85,11 @@ function lookAtScreenPos(object, x, y){
 
     const objectPosition = object.position; 
     const cursorPosition = new THREE.Vector3(x, y, 5);
+
+    debugSphere.position.x = x;
+    debugSphere.position.y = y;
+    debugSphere.position.z = 1;
+
 
     const lookPosition = cursorPosition.sub(objectPosition);
 
@@ -124,14 +134,6 @@ function testCallback(object){
         objectsToLookAtCursor.push(child);
     });
 
-    // let objectDuplicate = object.clone();
-
-    // scene.add(object);
-    // objectsToLookAtCursor.push(object);
-    // object.position.x = -2;
-
-    // scene.add(objectDuplicate);
-    // objectsToLookAtCursor.push(objectDuplicate);
 }
 
 function createGrid(object, size, spacing, colorize = false, color1, color2, color3) {
@@ -197,7 +199,7 @@ document.addEventListener('mousemove', (event) => {
     let x = event.clientX;
     let y = event.clientY;
     // console.log(x, y);
-
+    
     objectsToLookAtCursor.forEach((object) => {
         lookAtScreenPos(object, x, y);
     });
