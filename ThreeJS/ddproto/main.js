@@ -1,7 +1,39 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+// import { PMREMGenerator } from 'three/examples/jsm/pmrem/PMREMGenerator.js';
 
-// Create Loader & Load Object
+// Create scene 
+const scene = new THREE.Scene();
+
+// Create a renderer
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setAnimationLoop( animate ); 
+document.body.appendChild( renderer.domElement );
+
+// Create HDRI Loader & Load HDRI
+const rgbeLoader = new RGBELoader();
+
+rgbeLoader.load('./public/shanghai_4k.hdr', function(texture) {
+  texture.mapping = THREE.EquirectangularReflectionMapping;
+
+  const geometry = new THREE.SphereGeometry(500, 60, 40);
+  geometry.scale(-1, 1, 1); 
+
+//   const material = new THREE.MeshBasicMaterial({ map: texture });
+//   const skySphere = new THREE.Mesh(geometry, material);
+//   scene.add(skySphere);
+
+  // Optional: Lighting
+  const pmremGenerator = new THREE.PMREMGenerator(renderer);
+  pmremGenerator.compileEquirectangularShader();
+
+  const envMap = pmremGenerator.fromEquirectangular(texture).texture;
+  scene.environment = envMap;
+});
+
+// Create GLTF Loader & Load Object
 const loader = new GLTFLoader();
 let suzzane;
 loadObjectFromFile('idcard', './public/passport/passport.gltf', true, testCallback);
@@ -9,18 +41,9 @@ loadObjectFromFile('idcard', './public/passport/passport.gltf', true, testCallba
 // List of objects that should look at the cursor
 let objectsToLookAtCursor = [];
 
-// Create scene 
-const scene = new THREE.Scene();
-
 // Create camera
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.z = 5;
-
-// Create a renderer
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.setAnimationLoop( animate ); 
-document.body.appendChild( renderer.domElement );
 
 // Background color
 renderer.setClearColor(0x000000, 1); // The second argument is the alpha value (0 for fully transparent)
