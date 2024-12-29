@@ -1,41 +1,18 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-
-// Create Loader
+// Create Loader & Load Object
 const loader = new GLTFLoader();
+let suzzane;
+loadObjectFromFile('idcard', './public/passport/passport.gltf', true, testCallback);
 
 // List of objects that should look at the cursor
 let objectsToLookAtCursor = [];
 
-let suzzane;
-loadObjectFromFile('idcard', './public/passport/passport.gltf', true, testCallback);
-
-// color test
-let color1 = new THREE.Color(0xff0000);
-let color2 = new THREE.Color(0x00ff00);
-let color3 = new THREE.Color(0x0000ff);
-
-
-// Materials
-let mp_green = {
-    color: 0x00ff00,
-};
-let mp_blue = {
-    color: 0x0000ff,
-};
-let mp_red = {
-    color: 0xff0000,
-};
-
-let mp_default = {
-    color: color3,
-}
-
 // Create scene 
 const scene = new THREE.Scene();
 
-// Create a camera
+// Create camera
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.z = 5;
 
@@ -45,20 +22,21 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setAnimationLoop( animate ); 
 document.body.appendChild( renderer.domElement );
 
+// Background color
 renderer.setClearColor(0x000000, 1); // The second argument is the alpha value (0 for fully transparent)
 
 // Basic Box Geometry
 const geometry = new THREE.BoxGeometry( 1, 1, 1 );
 
 // Create a directional light
-const directionalLight = new THREE.DirectionalLight( 0xffffff, 2 );
-const directionalLightTarget = directionalLight.target;
-scene.add( directionalLight );
-scene.add( directionalLightTarget );   
-directionalLightTarget.position.set(1, -1, -1);
+createDirectionalLight(0xffffff, 2, {x: 1, y: -1, z: -1});
+createDirectionalLight(0xa5aeff, 0.5, {x: -0.5, y: 0.5, z: -1});
 
-const ambientLight = new THREE.AmbientLight( 0x404040, 10 ); // soft white light scene.add( light );
-scene.add( ambientLight );
+const light = new THREE.HemisphereLight( 0xffffff, 0x0000ff, 10 );
+scene.add( light );
+
+// const ambientLight = new THREE.AmbientLight( 0x404040, 10 ); // soft white light scene.add( light );
+// scene.add( ambientLight );
 
 // Little testing function lol
 // testingCubes();
@@ -119,21 +97,18 @@ function testCallback(object){
     objectsToLookAtCursor.push(object);
 }
 
-function testingCubes(){
-    const material = new THREE.MeshPhongMaterial( mp_red );
-    const cube = new THREE.Mesh( geometry, material );
-    cube.position.x = 2;
-    scene.add( cube );
+function createDirectionalLight(color, intensity, direction){
+    // Create a directional light & target
+    const directionalLight = new THREE.DirectionalLight(color, intensity);
+    const directionalLightTarget = directionalLight.target;
 
-    const material2 = new THREE.MeshPhysicalMaterial( mp_blue );
-    const cube2 = new THREE.Mesh( geometry, material2 );
-    cube2.position.x = -2;
-    scene.add( cube2 );
+    // Add the light & target to the scene
+    scene.add(directionalLight);
+    scene.add(directionalLightTarget);   
 
-    const material3 = new THREE.MeshMatcapMaterial( mp_green );
-    const cube3 = new THREE.Mesh( geometry, material3 );
-    cube3.position.y = 2;
-    scene.add( cube3 );
+    // Set the light target's position
+    directionalLight.position.set(0, 0, 0);
+    directionalLightTarget.position.set(direction.x, direction.y, direction.z);
 }
 
 // ### Event Listeners ###
@@ -154,6 +129,4 @@ document.addEventListener('mousemove', (event) => {
     objectsToLookAtCursor.forEach((object) => {
         lookAtScreenPos(object, x, y);
     });
-
-    
 });
