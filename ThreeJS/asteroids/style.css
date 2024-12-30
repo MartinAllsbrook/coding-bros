@@ -1,0 +1,14 @@
+.debug-window{
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px 20px;
+    font-size: 12px;
+    font-family: monospace;
+
+    border: 1px solid white;
+}
+
+.timer{
+    color: white;
+}
