@@ -1,13 +1,11 @@
 // ThreeJS
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 // Custom
 import LoopTimer from './modules/LoopTimer.js';
 import Vector2D from './modules/Vector2D.js';
+import Player from './modules/Player.js';
 
-// Create Loader
-const loader = new GLTFLoader();
 
 // Create scene 
 const scene = new THREE.Scene();
@@ -49,14 +47,9 @@ const ambientLight = new THREE.AmbientLight( 0x404040, 2 ); // soft white light 
 scene.add( ambientLight );
 
 // Create plaer object
-const geometry = new THREE.ConeGeometry( 0.5, 2, 32 ); 
-const material = new THREE.MeshPhysicalMaterial( {color: 0xffff00} ); 
-const playerObject = new THREE.Mesh(geometry, material ); 
-scene.add( playerObject );
+const player = new Player(scene);
 
-// Spme globals
-const moveInput = new Vector2D(0, 0);
-const moveSpeed = 5;
+// Some globals TODO: move these to a class
 let deltaTime = 0;
 
 // Game loop
@@ -68,9 +61,11 @@ function logicUpdate() {  // What happens each gametick
     setTimeout (() => { // Recursive call with setTimeout() calls the method every tickSpeed milisecconds
         if (!gameOver) {
             // Move player
-            calcMoveInput();
-            playerObject.position.x += moveInput.x * moveSpeed * deltaTime;
-            playerObject.position.y += moveInput.y * moveSpeed * deltaTime;
+            let moveInput = calcMoveInput();
+            let rotationInput = calcRotationInput();
+
+            player.move(moveInput, deltaTime);
+            player.rotate(rotationInput, deltaTime);
 
             console.log('Game Loop');
             deltaTime = gameLoopTimer.loop() / 1000;     
@@ -80,21 +75,35 @@ function logicUpdate() {  // What happens each gametick
 }
 
 function calcMoveInput(){
-    moveInput.x = 0;
-    moveInput.y = 0;
+    let moveInput = new Vector2D(0, 0);
 
-    if (inputs.up) {
-        moveInput.y = 1;
+    if (inputs.move.up) {
+        moveInput.y += 1;
     }
-    if (inputs.down) {
-        moveInput.y = -1;
+    if (inputs.move.down) {
+        moveInput.y += -1;
     }
-    if (inputs.left) {
-        moveInput.x = -1;
+    if (inputs.move.left) {
+        moveInput.x += -1;
     }
-    if (inputs.right) {
-        moveInput.x = 1;
+    if (inputs.move.right) {
+        moveInput.x += 1;
     }
+
+    return moveInput;
+}
+
+function calcRotationInput(){
+    let rotationInput = 0;
+
+    if (inputs.rotate.left) {
+        rotationInput += 1;
+    }
+    if (inputs.rotate.right) {
+        rotationInput += -1;
+    }
+
+    return rotationInput;
 }
 
 // Basic animation function for the cube 
@@ -107,26 +116,42 @@ function animate() {
 
 // Movement
 const inputs = {
-    up: false,
-    down: false,
-    left: false,
-    right: false,
+    move: {
+        up: false,
+        down: false,
+        left: false,
+        right: false,
+    },
+
+    rotate: {
+        left: false,
+        right: false,
+    }
 }
 
 document.addEventListener('keydown', (event) => {
     console.log('Key pressed:', event.key);
 
+    // Movement
     if (event.key === 'w' || event.key === 'W' || event.key === 'ArrowUp') {
-        inputs.up = true;
+        inputs.move.up = true;
     }
     if (event.key === 's' || event.key === 'S' || event.key === 'ArrowDown') {
-        inputs.down = true;
+        inputs.move.down = true;
     }
     if (event.key === 'a' || event.key === 'A' || event.key === 'ArrowLeft') {
-        inputs.left = true;
+        inputs.move.left = true;
     }
     if (event.key === 'd' || event.key === 'D' || event.key === 'ArrowRight') {
-        inputs.right = true;
+        inputs.move.right = true;
+    }
+
+    // Rotation
+    if (event.key === 'q' || event.key === 'Q' || event.key === ',' || event.key === '<') {
+        inputs.rotate.left = true;
+    }
+    if (event.key === 'e' || event.key === 'E' || event.key === '.' || event.key === '>') {
+        inputs.rotate.right = true;
     }
 });
 
@@ -134,16 +159,24 @@ document.addEventListener('keyup', (event) => {
     console.log('Key released:', event.key);
 
     if (event.key === 'w' || event.key === 'W' || event.key === 'ArrowUp') {
-        inputs.up = false;
+        inputs.move.up = false;
     }
     if (event.key === 's' || event.key === 'S' || event.key === 'ArrowDown') {
-        inputs.down = false;
+        inputs.move.down = false;
     }
     if (event.key === 'a' || event.key === 'A' || event.key === 'ArrowLeft') {
-        inputs.left = false;
+        inputs.move.left = false;
     }
     if (event.key === 'd' || event.key === 'D' || event.key === 'ArrowRight') {
-        inputs.right = false;
+        inputs.move.right = false;
+    }
+
+    // Rotation
+    if (event.key === 'q' || event.key === 'Q' || event.key === ',' || event.key === '<') {
+        inputs.rotate.left = false;
+    }
+    if (event.key === 'e' || event.key === 'E' || event.key === '.' || event.key === '>') {
+        inputs.rotate.right = false;
     }
 });
 
