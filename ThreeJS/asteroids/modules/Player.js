@@ -9,7 +9,7 @@ export default class Player {
         this.position = new Vector2D();
         this.rotation = 0;
 
-        this.object = this.createObject(scene);
+        this.object = this.createObject(scene.basics.scene);
 
         // Constants
         this.moveSpeed = 3;
@@ -18,7 +18,7 @@ export default class Player {
 
     createObject(scene) {
         const geometry = new THREE.ConeGeometry( 0.5, 2, 32 ); 
-        const material = new THREE.MeshPhysicalMaterial( {color: 0xffff00} ); 
+        const material = new THREE.MeshPhysicalMaterial( {color: 0xffffff} ); 
         const playerObject = new THREE.Mesh(geometry, material ); 
         scene.add( playerObject );
         return playerObject;

@@ -2,55 +2,24 @@
 import * as THREE from 'three';
 
 // Custom
+import GameScene from './modules/GameScene.js';
 import LoopTimer from './modules/LoopTimer.js';
 import Vector2D from './modules/Vector2D.js';
 import Player from './modules/Player.js';
+import Asteroid from './modules/Asteroid.js';
 
+let windowWith = window.innerWidth;
+let windowHeight = window.innerHeight;
 
-// Create scene 
-const scene = new THREE.Scene();
-
-// Create a camera
-const camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 0.1, 1000 );
-camera.position.z = 5;
-camera.translateZ( 5 );
-
-// Create a renderer
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-
-// Start render loop and time it
-const animationLoopTimer = new LoopTimer(document.getElementById('renderLoopTime'), "Render");
-renderer.setAnimationLoop( animate ); 
-
-// Add the renderer to the body
-document.body.appendChild( renderer.domElement );
-renderer.domElement.style.position = 'absolute';
-renderer.domElement.style.top = 0;
-renderer.domElement.style.left = 0;
-renderer.domElement.style.width = '100%';
-renderer.domElement.style.height = '100%';
-renderer.domElement.style.zIndex = -1;
-
-// Background color
-renderer.setClearColor(0x000000, 1); // The second argument is the alpha value (0 for fully transparent)
-
-// Create a directional light
-const directionalLight = new THREE.DirectionalLight( 0xffffff, 2 );
-const directionalLightTarget = directionalLight.target;
-scene.add( directionalLight );
-scene.add( directionalLightTarget );   
-directionalLightTarget.position.set(1, -1, -1);
-
-// Create an ambient light
-const ambientLight = new THREE.AmbientLight( 0x404040, 2 ); // soft white light scene.add( light );
-scene.add( ambientLight );
+const gameScene = new GameScene();
 
 // Create plaer object
-const player = new Player(scene);
+const player = new Player(gameScene);
 
 // Some globals TODO: move these to a class
 let deltaTime = 0;
+
+const asteroidTest = new Asteroid(gameScene, new Vector2D(0, 0), 3);
 
 // Game loop
 let gameOver = false;
@@ -66,6 +35,9 @@ function logicUpdate() {  // What happens each gametick
 
             player.move(moveInput, deltaTime);
             player.rotate(rotationInput, deltaTime);
+            
+            // Update asteroid
+            asteroidTest.update(deltaTime);
 
             console.log('Game Loop');
             deltaTime = gameLoopTimer.loop() / 1000;     
@@ -106,12 +78,6 @@ function calcRotationInput(){
     return rotationInput;
 }
 
-// Basic animation function for the cube 
-function animate() {
-	renderer.render( scene, camera );
-    animationLoopTimer.loop();
-}
-
 // ### Event Listeners ###
 
 // Movement
@@ -130,7 +96,7 @@ const inputs = {
 }
 
 document.addEventListener('keydown', (event) => {
-    console.log('Key pressed:', event.key);
+    // console.log('Key pressed:', event.key);
 
     // Movement
     if (event.key === 'w' || event.key === 'W' || event.key === 'ArrowUp') {
@@ -156,7 +122,7 @@ document.addEventListener('keydown', (event) => {
 });
 
 document.addEventListener('keyup', (event) => {
-    console.log('Key released:', event.key);
+    // console.log('Key released:', event.key);
 
     if (event.key === 'w' || event.key === 'W' || event.key === 'ArrowUp') {
         inputs.move.up = false;
@@ -180,9 +146,4 @@ document.addEventListener('keyup', (event) => {
     }
 });
 
-// Event listener for window resizing
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-});
+
