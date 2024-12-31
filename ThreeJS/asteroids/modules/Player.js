@@ -4,10 +4,11 @@ import * as THREE from 'three';
 // Custom
 import Vector2D from './Vector2D.js';
 import CollisionObject from './CollisionObject.js';
+import Bullet from './Bullet.js';
 
 export default class Player extends CollisionObject{
     constructor(gameScene) {
-        super(gameScene, new Vector2D(0, 0), 1);
+        super(gameScene, new Vector2D(3, 3), 0.5);
         this.rotation = 0;
 
         // Constants
@@ -16,7 +17,8 @@ export default class Player extends CollisionObject{
     }
 
     rotate(rotationInput, deltaTime) {
-        this.object.rotation.z += rotationInput * this.rotationSpeed * deltaTime;
+        this.rotation += rotationInput * this.rotationSpeed * deltaTime;
+        this.object.rotation.z = this.rotation;
     }
 
     move(moveInput, deltaTime) {
@@ -25,16 +27,54 @@ export default class Player extends CollisionObject{
         this.setPosition(newPosition);
     }
 
-    update(deltaTime, moveInput, rotationInput) {
+    update(deltaTime, moveInput, rotationInput, fireInput) {
         this.move(moveInput, deltaTime);
         this.rotate(rotationInput, deltaTime);
 
         this.gameScene.asteroids.forEach(asteroid => {
             if (this.checkCollision(asteroid)) {
-                console.log('Collision detected');
-                // gameScene.removeAsteroid(asteroid);
-                // gameScene.removeBullet(this);
+                console.log('Game Over');
+
+                super.destroy();
+                
+                // do other game over stuff
             }
         });
+
+        if (fireInput) {
+            this.fire();
+        }
+    }
+
+    fire() {
+        const direction = Vector2D.fromAngle(this.rotation);
+
+        const bullet = new Bullet(this.gameScene, this.position, direction);
+
+        console.log(this.rotation)
+        this.gameScene.addBullet(bullet);
+    }
+
+    createObject(scene, radius) {
+        console.log('Creating player object override');
+        const newObject = super.createObject(scene, radius);    
+        
+        const coneHeight = 1;
+
+        const geometry = new THREE.ConeGeometry( radius, coneHeight, 32 ); 
+        const material = new THREE.MeshPhysicalMaterial( {color: 0xffffff} ); 
+        const cone = new THREE.Mesh(geometry, material ); 
+
+        scene.add( cone );
+        scene.add( newObject );
+
+        newObject.attach( cone );
+
+        console.log(this.radius);
+        cone.position.y += coneHeight / 2;
+
+
+
+        return newObject;
     }
 }

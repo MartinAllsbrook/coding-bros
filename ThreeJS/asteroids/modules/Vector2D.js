@@ -27,4 +27,8 @@ export default class Vector2D {
         }
         return new Vector2D(this.x / mag, this.y / mag);
     }
+
+    static fromAngle(angle) {
+        return new Vector2D(-Math.sin(angle), Math.cos(angle)).normalize();
+    }
 }

@@ -33,10 +33,9 @@ function logicUpdate() {  // What happens each gametick
             let moveInput = calcMoveInput();
             let rotationInput = calcRotationInput();
 
-            player.update(deltaTime, moveInput, rotationInput);
+            player.update(deltaTime, moveInput, rotationInput, inputs.shoot);
             
-            // Update asteroid
-            asteroidTest.update(deltaTime);
+            gameScene.update(deltaTime);
 
             // console.log('Game Loop');
             deltaTime = gameLoopTimer.loop() / 1000;     

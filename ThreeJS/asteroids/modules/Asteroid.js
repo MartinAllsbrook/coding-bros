@@ -34,4 +34,10 @@ export default class Asteroid extends CollisionObject{
 
         this.setPosition(newPosition);
     }
+
+    destroy() {
+        this.gameScene.removeAsteroid(this);
+
+        super.destroy();
+    }
 }

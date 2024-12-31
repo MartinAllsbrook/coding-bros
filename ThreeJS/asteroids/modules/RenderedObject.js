@@ -4,8 +4,10 @@ export default class RenderedObject {
     constructor(gameScene, position, radius) {
         this.position = position;
         this.gameScene = gameScene;
+        this.radius = radius;
 
         this.object = this.createObject(gameScene.basics.scene, radius);
+        this.setPosition(this.position);
     }
 
     createObject(scene, radius) {
@@ -22,5 +24,11 @@ export default class RenderedObject {
         this.position = position;
         this.object.position.x = position.x;
         this.object.position.y = position.y;
+    }
+
+    destroy() {
+        this.gameScene.basics.scene.remove(this.object); // This should be the gameScene
+        this.object.geometry.dispose();
+        this.object.material.dispose();
     }
 }

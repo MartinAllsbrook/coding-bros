@@ -20,8 +20,18 @@ export default class GameScene {
         }
 
         this.asteroids = [];
+        this.bullets = [];
 
         this.basics = this.createThreeJSScene();
+    }
+
+    update(deltaTime) {
+        this.asteroids.forEach(asteroid => {
+            asteroid.update(deltaTime);
+        });
+        this.bullets.forEach(bullet => {
+            bullet.update(deltaTime);
+        });
     }
 
     createThreeJSScene() {
@@ -99,6 +109,17 @@ export default class GameScene {
         const index = this.asteroids.indexOf(asteroid);
         if (index > -1) {
             this.asteroids.splice(index, 1);
+        }
+    }
+
+    addBullet(bullet) {
+        this.bullets.push(bullet);
+    }
+
+    removeBullet(bullet) {
+        const index = this.bullets.indexOf(bullet);
+        if (index > -1) {
+            this.bullets.splice(index, 1);
         }
     }
 }

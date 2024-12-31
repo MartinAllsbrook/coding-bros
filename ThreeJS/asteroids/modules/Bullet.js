@@ -7,15 +7,22 @@ export default class Bullet extends CollisionObject {
     }
 
     update(deltaTime) {
-        this.setPosition(this.position.add(this.direction.multiply(this.speed * deltaTime)));
+        this.setPosition(this.position.add(this.velocity.multiply(deltaTime)));
     
-        gameScene.asteroids.forEach(asteroid => {
+        this.gameScene.asteroids.forEach(asteroid => {
             if (this.checkCollision(asteroid)) {
                 console.log('Collision detected');
-                // gameScene.removeAsteroid(asteroid);
-                // gameScene.removeBullet(this);
+                
+                asteroid.destroy();
+
+                this.destroy();
             }
         });
+    }
+
+    destroy() {
+        super.destroy();
+        // this = null; // IDK if this works
     }
 
 
