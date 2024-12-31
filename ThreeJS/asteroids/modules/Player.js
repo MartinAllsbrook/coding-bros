@@ -3,34 +3,38 @@ import * as THREE from 'three';
 
 // Custom
 import Vector2D from './Vector2D.js';
+import CollisionObject from './CollisionObject.js';
 
-export default class Player {
-    constructor(scene) {
-        this.position = new Vector2D();
+export default class Player extends CollisionObject{
+    constructor(gameScene) {
+        super(gameScene, new Vector2D(0, 0), 1);
         this.rotation = 0;
-
-        this.object = this.createObject(scene.basics.scene);
 
         // Constants
         this.moveSpeed = 3;
         this.rotationSpeed = 1;
     }
 
-    createObject(scene) {
-        const geometry = new THREE.ConeGeometry( 0.5, 2, 32 ); 
-        const material = new THREE.MeshPhysicalMaterial( {color: 0xffffff} ); 
-        const playerObject = new THREE.Mesh(geometry, material ); 
-        scene.add( playerObject );
-        return playerObject;
+    rotate(rotationInput, deltaTime) {
+        this.object.rotation.z += rotationInput * this.rotationSpeed * deltaTime;
     }
 
-    rotate(deltaRotation, deltaTime) {
-        this.object.rotation.z += deltaRotation * this.rotationSpeed * deltaTime;
+    move(moveInput, deltaTime) {
+        moveInput = moveInput.normalize();
+        const newPosition = this.position.add(moveInput.multiply(this.moveSpeed * deltaTime));
+        this.setPosition(newPosition);
     }
 
-    move(moveVector, deltaTime) {
-        const move = moveVector.multiply(this.moveSpeed * deltaTime);
-        this.object.position.x += move.x;
-        this.object.position.y += move.y;
+    update(deltaTime, moveInput, rotationInput) {
+        this.move(moveInput, deltaTime);
+        this.rotate(rotationInput, deltaTime);
+
+        this.gameScene.asteroids.forEach(asteroid => {
+            if (this.checkCollision(asteroid)) {
+                console.log('Collision detected');
+                // gameScene.removeAsteroid(asteroid);
+                // gameScene.removeBullet(this);
+            }
+        });
     }
 }

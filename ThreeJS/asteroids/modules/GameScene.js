@@ -19,6 +19,8 @@ export default class GameScene {
             // height: windowToScene * this.window.height / this.window.width,
         }
 
+        this.asteroids = [];
+
         this.basics = this.createThreeJSScene();
     }
 
@@ -89,4 +91,14 @@ export default class GameScene {
         return sceneBasics;
     }
     
+    addAsteroid(asteroid) {
+        this.asteroids.push(asteroid);
+    }
+
+    removeAsteroid(asteroid) {
+        const index = this.asteroids.indexOf(asteroid);
+        if (index > -1) {
+            this.asteroids.splice(index, 1);
+        }
+    }
 }

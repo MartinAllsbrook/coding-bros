@@ -17,7 +17,7 @@ export default class Vector2D {
     }
 
     magnitude() {
-        return Math.sqrt(this.x * this.y);
+        return Math.sqrt((Math.pow(Math.abs(this.x), 2)) + (Math.pow(Math.abs(this.y), 2)));
     }
 
     normalize() {

@@ -19,7 +19,7 @@ const player = new Player(gameScene);
 // Some globals TODO: move these to a class
 let deltaTime = 0;
 
-const asteroidTest = new Asteroid(gameScene, new Vector2D(0, 0), 3);
+const asteroidTest = new Asteroid(gameScene, new Vector2D(0, 0), 3, 1);
 
 // Game loop
 let gameOver = false;
@@ -33,13 +33,12 @@ function logicUpdate() {  // What happens each gametick
             let moveInput = calcMoveInput();
             let rotationInput = calcRotationInput();
 
-            player.move(moveInput, deltaTime);
-            player.rotate(rotationInput, deltaTime);
+            player.update(deltaTime, moveInput, rotationInput);
             
             // Update asteroid
             asteroidTest.update(deltaTime);
 
-            console.log('Game Loop');
+            // console.log('Game Loop');
             deltaTime = gameLoopTimer.loop() / 1000;     
             logicUpdate();       
         }
@@ -92,7 +91,9 @@ const inputs = {
     rotate: {
         left: false,
         right: false,
-    }
+    },
+
+    shoot: false
 }
 
 document.addEventListener('keydown', (event) => {
@@ -119,6 +120,11 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'e' || event.key === 'E' || event.key === '.' || event.key === '>') {
         inputs.rotate.right = true;
     }
+
+    // Shooting
+    if (event.key === ' ') {
+        inputs.shoot = true;
+    }
 });
 
 document.addEventListener('keyup', (event) => {
@@ -143,6 +149,11 @@ document.addEventListener('keyup', (event) => {
     }
     if (event.key === 'e' || event.key === 'E' || event.key === '.' || event.key === '>') {
         inputs.rotate.right = false;
+    }
+
+    // Shooting
+    if (event.key === ' ') {
+        inputs.shoot = false;
     }
 });
 
