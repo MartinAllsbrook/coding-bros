@@ -1,4 +1,7 @@
+
+
 import CollisionObject from './CollisionObject.js';
+import Scoreboard from './Scoreboard.js';
 
 export default class Bullet extends CollisionObject {
     constructor(gameScene, position, velocity) {
@@ -18,17 +21,25 @@ export default class Bullet extends CollisionObject {
 
         this.gameScene.asteroids.forEach(asteroid => {
             if (this.checkCollision(asteroid)) {
-                console.log('Collision detected');
-                
-                asteroid.destroy();
-
-                this.destroy();
+                this.asteriodHit(asteroid);
             }
         });
     }
 
+    asteriodHit(asteroid) {
+        Scoreboard.singleton.increment();
+
+        console.log('Collision detected');
+                
+        asteroid.destroy();
+
+        this.destroy();
+    }
+
     destroy() {
         super.destroy();
+
+        this.gameScene.removeBullet(this);
         // this = null; // IDK if this works
     }
 

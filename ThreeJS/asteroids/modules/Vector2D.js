@@ -31,4 +31,12 @@ export default class Vector2D {
     static fromAngle(angle) {
         return new Vector2D(-Math.sin(angle), Math.cos(angle)).normalize();
     }
+
+    static random() {
+        return new Vector2D(Math.random() * 2 - 1, Math.random() * 2 - 1);
+    }
+
+    static normalRandom() {
+        return new Vector2D(Math.random() - 0.5, Math.random() - 0.5).normalize();
+    }
 }

@@ -84,4 +84,4 @@ export default class Player extends CollisionObject{
 
         return newObject;
     }
-}
+} 

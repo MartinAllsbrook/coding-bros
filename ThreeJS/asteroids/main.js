@@ -7,11 +7,14 @@ import LoopTimer from './modules/LoopTimer.js';
 import Vector2D from './modules/Vector2D.js';
 import Player from './modules/Player.js';
 import Asteroid from './modules/Asteroid.js';
+import Scoreboard from './modules/Scoreboard.js';
 
 let windowWith = window.innerWidth;
 let windowHeight = window.innerHeight;
 
 const gameScene = new GameScene();
+
+new Scoreboard(document.getElementById('scoreboard'));
 
 // Create plaer object
 const player = new Player(gameScene);
@@ -19,7 +22,9 @@ const player = new Player(gameScene);
 // Some globals TODO: move these to a class
 let deltaTime = 0;
 
-const asteroidTest = new Asteroid(gameScene, new Vector2D(0, 0), 3, 0.5);
+new Asteroid(gameScene, new Vector2D(0, 0), 1);
+new Asteroid(gameScene, new Vector2D(0, 0), 2);
+new Asteroid(gameScene, new Vector2D(0, 0), 3);
 
 // Game loop
 let gameOver = false;

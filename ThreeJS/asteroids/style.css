@@ -1,4 +1,4 @@
-.debug-window{
+.text-display{
     position: absolute;
     top: 0;
     left: 0;
@@ -7,8 +7,10 @@
     font-family: monospace;
 
     border: 1px solid white;
-}
-
-.timer{
     color: white;
 }
+
+#scoreboard {
+    left: unset;
+    right: 0;
+} 
