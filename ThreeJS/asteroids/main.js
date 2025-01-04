@@ -19,7 +19,7 @@ const player = new Player(gameScene);
 // Some globals TODO: move these to a class
 let deltaTime = 0;
 
-const asteroidTest = new Asteroid(gameScene, new Vector2D(0, 0), 3, 1);
+const asteroidTest = new Asteroid(gameScene, new Vector2D(0, 0), 3, 0.5);
 
 // Game loop
 let gameOver = false;

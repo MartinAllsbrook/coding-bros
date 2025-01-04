@@ -20,7 +20,6 @@ export default class Asteroid extends CollisionObject{
 
     update(deltaTime) {
         let newPosition = this.position;
-        newPosition = newPosition.add(this.velocity.multiply(deltaTime));
 
         const xBoundary = this.gameScene.gameArea.width / 2;
         const yBoundary = this.gameScene.gameArea.height / 2;
@@ -31,6 +30,8 @@ export default class Asteroid extends CollisionObject{
         if (newPosition.y > yBoundary || newPosition.y < -yBoundary) {
             newPosition.y *= -1;
         }
+
+        newPosition = newPosition.add(this.velocity.multiply(deltaTime));
 
         this.setPosition(newPosition);
     }

@@ -14,6 +14,11 @@ export default class Player extends CollisionObject{
         // Constants
         this.moveSpeed = 3;
         this.rotationSpeed = 1;
+
+
+        this.bulletSpeed = 5;
+        this.lastFireTime = performance.now();
+        this.fireRate = 1000;
     }
 
     rotate(rotationInput, deltaTime) {
@@ -28,6 +33,7 @@ export default class Player extends CollisionObject{
     }
 
     update(deltaTime, moveInput, rotationInput, fireInput) {
+
         this.move(moveInput, deltaTime);
         this.rotate(rotationInput, deltaTime);
 
@@ -41,15 +47,16 @@ export default class Player extends CollisionObject{
             }
         });
 
-        if (fireInput) {
+        if (fireInput && performance.now() - this.lastFireTime > this.fireRate) {
             this.fire();
+            this.lastFireTime = performance.now();
         }
     }
 
     fire() {
         const direction = Vector2D.fromAngle(this.rotation);
 
-        const bullet = new Bullet(this.gameScene, this.position, direction);
+        const bullet = new Bullet(this.gameScene, this.position, direction.multiply(this.bulletSpeed));
 
         console.log(this.rotation)
         this.gameScene.addBullet(bullet);
