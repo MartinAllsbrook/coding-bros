@@ -3,7 +3,17 @@ import * as THREE from 'three';
 import LoopTimer from './LoopTimer.js';
 
 export default class GameScene {
+    static instance = null;
+
     constructor() {
+        // Create Singleton
+        if (GameScene.instance == null) {
+            GameScene.instance = this;
+        } else {
+            console.error('Cannot create more than one GameScene instance');
+            return;
+        }
+
         const windowToScene = 110;
         
         this.windowArea = {

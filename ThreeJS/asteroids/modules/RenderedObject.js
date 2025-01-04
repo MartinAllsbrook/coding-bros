@@ -1,12 +1,15 @@
 import * as THREE from 'three';
+import GameObject from './GameObject.js';
+import GameScene from './GameScene.js';
 
-export default class RenderedObject {
-    constructor(gameScene, position, radius) {
+export default class RenderedObject extends GameObject {
+    constructor(position, radius) {
+        super();
+
         this.position = position;
-        this.gameScene = gameScene;
         this.radius = radius;
 
-        this.object = this.createObject(gameScene.basics.scene, radius);
+        this.object = this.createObject(GameScene.instance.basics.scene, radius);
         this.setPosition(this.position);
     }
 
@@ -27,7 +30,7 @@ export default class RenderedObject {
     }
 
     destroy() {
-        this.gameScene.basics.scene.remove(this.object); // This should be the gameScene
+        GameScene.instance.basics.scene.remove(this.object); // This should be the gameScene
         this.object.geometry.dispose();
         this.object.material.dispose();
     }

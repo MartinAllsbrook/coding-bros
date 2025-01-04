@@ -5,10 +5,11 @@ import * as THREE from 'three';
 import Vector2D from './Vector2D.js';
 import CollisionObject from './CollisionObject.js';
 import Bullet from './Bullet.js';
+import GameScene from './GameScene.js';
 
 export default class Player extends CollisionObject{
-    constructor(gameScene) {
-        super(gameScene, new Vector2D(3, 3), 0.5);
+    constructor() {
+        super(new Vector2D(3, 3), 0.5);
         this.rotation = 0;
 
         // Constants
@@ -37,7 +38,7 @@ export default class Player extends CollisionObject{
         this.move(moveInput, deltaTime);
         this.rotate(rotationInput, deltaTime);
 
-        this.gameScene.asteroids.forEach(asteroid => {
+        GameScene.instance.asteroids.forEach(asteroid => {
             if (this.checkCollision(asteroid)) {
                 console.log('Game Over');
 
@@ -56,10 +57,10 @@ export default class Player extends CollisionObject{
     fire() {
         const direction = Vector2D.fromAngle(this.rotation);
 
-        const bullet = new Bullet(this.gameScene, this.position, direction.multiply(this.bulletSpeed));
+        const bullet = new Bullet(this.position, direction.multiply(this.bulletSpeed));
 
         console.log(this.rotation)
-        this.gameScene.addBullet(bullet);
+        GameScene.instance.addBullet(bullet);
     }
 
     createObject(scene, radius) {

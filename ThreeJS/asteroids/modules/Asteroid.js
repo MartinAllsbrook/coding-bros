@@ -5,15 +5,15 @@ import GameScene from './GameScene.js';
 import CollisionObject from './CollisionObject.js';
 
 export default class Asteroid extends CollisionObject{
-    constructor(gameScene, startPosition, size) {        
+    constructor(startPosition, size) {        
         const maxSpeed = 4 - size;
         const radius = size / 4;
 
-        super(gameScene, startPosition, radius);
+        super(startPosition, radius);
 
         this.asteroidSize = size;
 
-        gameScene.addAsteroid(this);
+        GameScene.instance.addAsteroid(this);
 
         const direction = Vector2D.normalRandom();
         direction.normalize();
@@ -26,8 +26,8 @@ export default class Asteroid extends CollisionObject{
     update(deltaTime) {
         let newPosition = this.position;
 
-        const xBoundary = this.gameScene.gameArea.width / 2;
-        const yBoundary = this.gameScene.gameArea.height / 2;
+        const xBoundary = GameScene.instance.gameArea.width / 2;
+        const yBoundary = GameScene.instance.gameArea.height / 2;
 
         if (newPosition.x > xBoundary || newPosition.x < -xBoundary) {
             newPosition.x *= -1;
@@ -43,11 +43,11 @@ export default class Asteroid extends CollisionObject{
 
     destroy() {
         if (this.asteroidSize > 1) {
-            new Asteroid(this.gameScene, this.position, this.asteroidSize - 1);
-            new Asteroid(this.gameScene, this.position, this.asteroidSize - 1);
+            new Asteroid(this.position, this.asteroidSize - 1);
+            new Asteroid(this.position, this.asteroidSize - 1);
         }
 
-        this.gameScene.removeAsteroid(this);
+        GameScene.instance.removeAsteroid(this);
 
         super.destroy();
     }

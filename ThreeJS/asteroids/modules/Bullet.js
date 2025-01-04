@@ -1,11 +1,10 @@
-
-
 import CollisionObject from './CollisionObject.js';
 import Scoreboard from './Scoreboard.js';
+import GameScene from './GameScene.js';
 
 export default class Bullet extends CollisionObject {
-    constructor(gameScene, position, velocity) {
-        super(gameScene, position, 0.1);
+    constructor(position, velocity) {
+        super(position, 0.1);
         this.velocity = velocity;
 
         this.creationTime = performance.now();
@@ -19,7 +18,7 @@ export default class Bullet extends CollisionObject {
             this.destroy();
         }
 
-        this.gameScene.asteroids.forEach(asteroid => {
+        GameScene.instance.asteroids.forEach(asteroid => {
             if (this.checkCollision(asteroid)) {
                 this.asteriodHit(asteroid);
             }
@@ -39,9 +38,7 @@ export default class Bullet extends CollisionObject {
     destroy() {
         super.destroy();
 
-        this.gameScene.removeBullet(this);
+        GameScene.instance.removeBullet(this);
         // this = null; // IDK if this works
     }
-
-
 }

@@ -8,39 +8,46 @@ import Vector2D from './modules/Vector2D.js';
 import Player from './modules/Player.js';
 import Asteroid from './modules/Asteroid.js';
 import Scoreboard from './modules/Scoreboard.js';
+import ObjectManager from './modules/ObjectManager.js';
 
 let windowWith = window.innerWidth;
 let windowHeight = window.innerHeight;
 
-const gameScene = new GameScene();
-
+// Create singletons
+new GameScene();
 new Scoreboard(document.getElementById('scoreboard'));
+new ObjectManager();
 
 // Create plaer object
-const player = new Player(gameScene);
+const player = new Player();
 
 // Some globals TODO: move these to a class
 let deltaTime = 0;
 
-new Asteroid(gameScene, new Vector2D(0, 0), 1);
-new Asteroid(gameScene, new Vector2D(0, 0), 2);
-new Asteroid(gameScene, new Vector2D(0, 0), 3);
+// Create some asteroids for testing
+new Asteroid(new Vector2D(0, 0), 1);
+new Asteroid(new Vector2D(0, 0), 2);
+new Asteroid(new Vector2D(0, 0), 3);
 
 // Game loop
 let gameOver = false;
 const tickSpeed = 16;
 const gameLoopTimer = new LoopTimer(document.getElementById('gameLoopTime'), "Game");
 logicUpdate();
+
+// Main game loop
 function logicUpdate() {  // What happens each gametick
     setTimeout (() => { // Recursive call with setTimeout() calls the method every tickSpeed milisecconds
         if (!gameOver) {
+            ObjectManager.instance.update(deltaTime);
+
             // Move player
             let moveInput = calcMoveInput();
             let rotationInput = calcRotationInput();
 
             player.update(deltaTime, moveInput, rotationInput, inputs.shoot);
             
-            gameScene.update(deltaTime);
+            GameScene.instance.update(deltaTime);
 
             // console.log('Game Loop');
             deltaTime = gameLoopTimer.loop() / 1000;     
