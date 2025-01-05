@@ -13,19 +13,25 @@ export default class Player extends CollisionObject{
     // 0 => W / Forward Only
     // 1 => W & D / Forward and Backward
     // 2 => WASD / Full Movement
-    movementScheme = 1; 
+    movementScheme = 2; 
+
+    // Movement
+    velocity = new Vector2D(0, 0);
+    maxSpeed = 5;
+    acceleration = 5;
+    decceleration = 2;
+    
+    rotation = 0; // In radians
+
+    rotationSpeed = 1;
+
+    bulletSpeed = 5;
+    fireRate = 1000;
 
     constructor() {
         super(new Vector2D(3, 3), 0.5, 0);
-        this.rotation = 0; // In radians
 
-        // Constants
-        this.moveSpeed = 3;
-        this.rotationSpeed = 1;
-
-        this.bulletSpeed = 5;
         this.lastFireTime = performance.now();
-        this.fireRate = 1000;
     }
 
     update(deltaTime) {
@@ -39,32 +45,34 @@ export default class Player extends CollisionObject{
     }
 
     move(moveInput, deltaTime) {
+        // Apply movement scheme
         switch (this.movementScheme) {
             case 0:
-                this.moveForward(moveInput, deltaTime);
+                moveInput = this.moveForward(moveInput, deltaTime);
                 break;
             case 1:
-                this.moveForwardBackward(moveInput, deltaTime);
+                moveInput = this.moveForwardBackward(moveInput, deltaTime);
                 break;
             case 2:
-                this.moveFull(moveInput, deltaTime);
+                moveInput = this.moveFull(moveInput, deltaTime);
                 break;
             default:
                 break;
         }
+
+        this.physicsUpdate(moveInput, deltaTime);
     }
 
     moveForward(moveInput, deltaTime) {
-        // Only move forward
         moveInput.x = 0;
-        if (moveInput.y < 0) {
-            moveInput.y = 0;
+        // Only move forward
+        if (moveInput.y < 0) { 
+            moveInput.y = 0; 
         }
 
         moveInput = moveInput.rotate(this.rotation);
 
-        const newPosition = this.position.add(moveInput.multiply(this.moveSpeed * deltaTime));
-        this.setPosition(newPosition);
+        return moveInput;
     }
 
     moveForwardBackward(moveInput, deltaTime) {
@@ -72,8 +80,7 @@ export default class Player extends CollisionObject{
 
         moveInput = moveInput.rotate(this.rotation);
 
-        const newPosition = this.position.add(moveInput.multiply(this.moveSpeed * deltaTime));
-        this.setPosition(newPosition);
+        return moveInput;
     }
 
     moveFull(moveInput, deltaTime) {
@@ -81,8 +88,24 @@ export default class Player extends CollisionObject{
 
         moveInput = moveInput.rotate(this.rotation);
 
-        const newPosition = this.position.add(moveInput.multiply(this.moveSpeed * deltaTime));
-        this.setPosition(newPosition);
+        return moveInput;
+    }
+
+    physicsUpdate(moveInput, deltaTime) {
+        // Apply decceleration
+        this.velocity = this.velocity.multiply(1 - this.decceleration * deltaTime);
+
+        // Apply acceleration
+        this.velocity = this.velocity.add(moveInput.multiply(this.acceleration * deltaTime));
+
+        // Limit speed
+        if (this.velocity.magnitude() > this.maxSpeed) {
+            this.velocity = this.velocity.normalize().multiply(this.maxSpeed);
+        }
+
+        // Update position
+        this.position = this.position.add(this.velocity.multiply(deltaTime));
+        this.setPosition(this.position);
     }
 
     rotate(rotationInput, deltaTime) {

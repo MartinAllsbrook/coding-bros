@@ -4,15 +4,28 @@ export default class InputManager {
     static instance = null;
 
     // Movement
+    moveKeys = {
+        up: ['w', 'W', 'ArrowUp'],
+        down: ['s', 'S', 'ArrowDown'],
+        left: ['q', 'Q', ',', '<'],
+        right: ['e', 'E', '.', '>'],
+    }
+
     move = {
         up: false,
         down: false,
         left: false,
         right: false,
     }
+
     moveValue = new Vector2D(0, 0);
 
     // Rotation
+    rotateKeys = {
+        left: ['a', 'A', 'ArrowLeft'],
+        right: ['d', 'D', 'ArrowRight'],
+    }
+
     rotate = {
         left: false,
         right: false,
@@ -20,6 +33,9 @@ export default class InputManager {
     rotationValue = 0;
     
     // Shooting
+    shootKeys = {
+        shoot: [' '],
+    }
     shoot = false;
 
     constructor() {
@@ -90,33 +106,43 @@ export default class InputManager {
         });
     }
 
+    inputMatch(event, keys) {
+        let match = false;
+        keys.forEach(key => {
+            if (event.key === key) {
+                match = true;
+            }
+        });
+        return match;
+    }
+
     onKeyDown(event) {
         // console.log(event.key + ' down');
 
         // Movement
-        if (event.key === 'w' || event.key === 'W' || event.key === 'ArrowUp') {
+        if (this.inputMatch(event, this.moveKeys.up)) {
             this.move.up = true;
         }
-        if (event.key === 's' || event.key === 'S' || event.key === 'ArrowDown') {
+        if (this.inputMatch(event, this.moveKeys.down)) {
             this.move.down = true;
         }
-        if (event.key === 'a' || event.key === 'A' || event.key === 'ArrowLeft') {
+        if (this.inputMatch(event, this.moveKeys.left)) {
             this.move.left = true;
         }
-        if (event.key === 'd' || event.key === 'D' || event.key === 'ArrowRight') {
+        if (this.inputMatch(event, this.moveKeys.right)) {
             this.move.right = true;
         }
     
         // Rotation
-        if (event.key === 'q' || event.key === 'Q' || event.key === ',' || event.key === '<') {
+        if (this.inputMatch(event, this.rotateKeys.left)) {
             this.rotate.left = true;
         }
-        if (event.key === 'e' || event.key === 'E' || event.key === '.' || event.key === '>') {
+        if (this.inputMatch(event, this.rotateKeys.right)) {
             this.rotate.right = true;
         }
     
         // Shooting
-        if (event.key === ' ') {
+        if (this.inputMatch(event, this.shootKeys.shoot)) {
             this.shoot = true;
         }
 
@@ -128,29 +154,29 @@ export default class InputManager {
         // console.log(event.key + ' up');
 
         // Movement
-        if (event.key === 'w' || event.key === 'W' || event.key === 'ArrowUp') {
+        if (this.inputMatch(event, this.moveKeys.up)) {
             this.move.up = false;
         }
-        if (event.key === 's' || event.key === 'S' || event.key === 'ArrowDown') {
+        if (this.inputMatch(event, this.moveKeys.down)) {
             this.move.down = false;
         }
-        if (event.key === 'a' || event.key === 'A' || event.key === 'ArrowLeft') {
+        if (this.inputMatch(event, this.moveKeys.left)) {
             this.move.left = false;
         }
-        if (event.key === 'd' || event.key === 'D' || event.key === 'ArrowRight') {
+        if (this.inputMatch(event, this.moveKeys.right)) {
             this.move.right = false;
         }
     
         // Rotation
-        if (event.key === 'q' || event.key === 'Q' || event.key === ',' || event.key === '<') {
+        if (this.inputMatch(event, this.rotateKeys.left)) {
             this.rotate.left = false;
         }
-        if (event.key === 'e' || event.key === 'E' || event.key === '.' || event.key === '>') {
+        if (this.inputMatch(event, this.rotateKeys.right)) {
             this.rotate.right = false;
         }
     
         // Shooting
-        if (event.key === ' ') {
+        if (this.inputMatch(event, this.shootKeys.shoot)) {
             this.shoot = false;
         }
 
