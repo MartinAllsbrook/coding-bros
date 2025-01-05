@@ -24,6 +24,6 @@ export default class ObjectManager {
     }
 
     update(deltaTime) {
-        this.objects.forEach(object => object.objectUpdate(deltaTime));
+        this.objects.forEach(object => object.update(deltaTime));
     }
 }

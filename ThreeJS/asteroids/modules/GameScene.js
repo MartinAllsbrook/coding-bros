@@ -35,15 +35,6 @@ export default class GameScene {
         this.basics = this.createThreeJSScene();
     }
 
-    update(deltaTime) {
-        this.asteroids.forEach(asteroid => {
-            asteroid.update(deltaTime);
-        });
-        this.bullets.forEach(bullet => {
-            bullet.update(deltaTime);
-        });
-    }
-
     createThreeJSScene() {
         // Create scene 
         const scene = new THREE.Scene();

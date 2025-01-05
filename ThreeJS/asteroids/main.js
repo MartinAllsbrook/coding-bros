@@ -9,6 +9,7 @@ import Player from './modules/Player.js';
 import Asteroid from './modules/Asteroid.js';
 import Scoreboard from './modules/Scoreboard.js';
 import ObjectManager from './modules/ObjectManager.js';
+import CollisionManager from './modules/CollisionManager.js';
 
 let windowWith = window.innerWidth;
 let windowHeight = window.innerHeight;
@@ -17,6 +18,7 @@ let windowHeight = window.innerHeight;
 new GameScene();
 new Scoreboard(document.getElementById('scoreboard'));
 new ObjectManager();
+new CollisionManager();
 
 // Create plaer object
 const player = new Player();
@@ -40,15 +42,13 @@ function logicUpdate() {  // What happens each gametick
     setTimeout (() => { // Recursive call with setTimeout() calls the method every tickSpeed milisecconds
         if (!gameOver) {
             ObjectManager.instance.update(deltaTime);
-
+            CollisionManager.instance.checkCollisions();
             // Move player
             let moveInput = calcMoveInput();
             let rotationInput = calcRotationInput();
 
-            player.update(deltaTime, moveInput, rotationInput, inputs.shoot);
+            player.setInputs(moveInput, rotationInput, inputs.shoot);
             
-            GameScene.instance.update(deltaTime);
-
             // console.log('Game Loop');
             deltaTime = gameLoopTimer.loop() / 1000;     
             logicUpdate();       

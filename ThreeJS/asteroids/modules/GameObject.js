@@ -5,7 +5,11 @@ export default class GameObject {
         ObjectManager.instance.add(this);
     }
 
-    objectUpdate(deltaTime) {
+    update(deltaTime) {
 
+    }
+
+    destroy() {
+        ObjectManager.instance.remove(this);
     }
 }

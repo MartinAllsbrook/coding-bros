@@ -8,8 +8,12 @@ import Bullet from './Bullet.js';
 import GameScene from './GameScene.js';
 
 export default class Player extends CollisionObject{
+    moveInput = new Vector2D(0, 0);
+    rotationInput = 0;
+    fireInput = false;
+    
     constructor() {
-        super(new Vector2D(3, 3), 0.5);
+        super(new Vector2D(3, 3), 0.5, 0);
         this.rotation = 0;
 
         // Constants
@@ -33,22 +37,28 @@ export default class Player extends CollisionObject{
         this.setPosition(newPosition);
     }
 
-    update(deltaTime, moveInput, rotationInput, fireInput) {
+    setInputs(moveInput, rotationInput, fireInput){
+        this.moveInput = moveInput;
+        this.rotationInput = rotationInput;
+        this.fireInput = fireInput;
+    }
 
-        this.move(moveInput, deltaTime);
-        this.rotate(rotationInput, deltaTime);
+    update(deltaTime) {
 
-        GameScene.instance.asteroids.forEach(asteroid => {
-            if (this.checkCollision(asteroid)) {
-                console.log('Game Over');
+        this.move(this.moveInput, deltaTime);
+        this.rotate(this.rotationInput, deltaTime);
 
-                super.destroy();
+        // GameScene.instance.asteroids.forEach(asteroid => {
+        //     if (this.checkCollision(asteroid)) {
+        //         console.log('Game Over');
+
+        //         super.destroy();
                 
-                // do other game over stuff
-            }
-        });
+        //         // do other game over stuff
+        //     }
+        // });
 
-        if (fireInput && performance.now() - this.lastFireTime > this.fireRate) {
+        if (this.fireInput && performance.now() - this.lastFireTime > this.fireRate) {
             this.fire();
             this.lastFireTime = performance.now();
         }
@@ -84,5 +94,11 @@ export default class Player extends CollisionObject{
 
 
         return newObject;
+    }
+
+    onCollision(otherObject) {
+        console.log('Game Over');
+
+        this.destroy();
     }
 } 

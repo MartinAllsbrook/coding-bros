@@ -3,13 +3,14 @@ import * as THREE from 'three';
 import Vector2D from './Vector2D.js';
 import GameScene from './GameScene.js';
 import CollisionObject from './CollisionObject.js';
+import ObjectManager from './ObjectManager.js';
 
 export default class Asteroid extends CollisionObject{
     constructor(startPosition, size) {        
         const maxSpeed = 4 - size;
         const radius = size / 4;
 
-        super(startPosition, radius);
+        super(startPosition, radius, 1);
 
         this.asteroidSize = size;
 
@@ -41,13 +42,20 @@ export default class Asteroid extends CollisionObject{
         this.setPosition(newPosition);
     }
 
+    onCollision(otherObject) {
+        this.destroy();
+    }
+
     destroy() {
+        const numChildren = 5 - this.asteroidSize;
+
         if (this.asteroidSize > 1) {
-            new Asteroid(this.position, this.asteroidSize - 1);
-            new Asteroid(this.position, this.asteroidSize - 1);
+            for (let i = 0; i < numChildren; i++) {
+                new Asteroid(this.position, this.asteroidSize - 1);
+            }
         }
 
-        GameScene.instance.removeAsteroid(this);
+        ObjectManager.instance.remove(this);
 
         super.destroy();
     }
