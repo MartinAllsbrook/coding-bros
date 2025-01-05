@@ -9,13 +9,15 @@ import GameScene from './GameScene.js';
 import InputManager from './InputManager.js';
 
 export default class Player extends CollisionObject{
-    moveInput = new Vector2D(0, 0);
-    rotationInput = 0;
-    fireInput = false;
-    
+    // Movement schemes
+    // 0 => W / Forward Only
+    // 1 => W & D / Forward and Backward
+    // 2 => WASD / Full Movement
+    movementScheme = 1; 
+
     constructor() {
         super(new Vector2D(3, 3), 0.5, 0);
-        this.rotation = 0;
+        this.rotation = 0; // In radians
 
         // Constants
         this.moveSpeed = 3;
@@ -26,23 +28,6 @@ export default class Player extends CollisionObject{
         this.fireRate = 1000;
     }
 
-    rotate(rotationInput, deltaTime) {
-        this.rotation += rotationInput * this.rotationSpeed * deltaTime;
-        this.object.rotation.z = this.rotation;
-    }
-
-    move(moveInput, deltaTime) {
-        moveInput = moveInput.normalize();
-        const newPosition = this.position.add(moveInput.multiply(this.moveSpeed * deltaTime));
-        this.setPosition(newPosition);
-    }
-
-    setInputs(moveInput, rotationInput, fireInput){
-        this.moveInput = moveInput;
-        this.rotationInput = rotationInput;
-        this.fireInput = fireInput;
-    }
-a
     update(deltaTime) {
         this.move(InputManager.instance.getMoveInput(), deltaTime);
         this.rotate(InputManager.instance.getRotationInput(), deltaTime);
@@ -51,6 +36,58 @@ a
             this.fire();
             this.lastFireTime = performance.now();
         }
+    }
+
+    move(moveInput, deltaTime) {
+        switch (this.movementScheme) {
+            case 0:
+                this.moveForward(moveInput, deltaTime);
+                break;
+            case 1:
+                this.moveForwardBackward(moveInput, deltaTime);
+                break;
+            case 2:
+                this.moveFull(moveInput, deltaTime);
+                break;
+            default:
+                break;
+        }
+    }
+
+    moveForward(moveInput, deltaTime) {
+        // Only move forward
+        moveInput.x = 0;
+        if (moveInput.y < 0) {
+            moveInput.y = 0;
+        }
+
+        moveInput = moveInput.rotate(this.rotation);
+
+        const newPosition = this.position.add(moveInput.multiply(this.moveSpeed * deltaTime));
+        this.setPosition(newPosition);
+    }
+
+    moveForwardBackward(moveInput, deltaTime) {
+        moveInput.x = 0;
+
+        moveInput = moveInput.rotate(this.rotation);
+
+        const newPosition = this.position.add(moveInput.multiply(this.moveSpeed * deltaTime));
+        this.setPosition(newPosition);
+    }
+
+    moveFull(moveInput, deltaTime) {
+        moveInput = moveInput.normalize();
+
+        moveInput = moveInput.rotate(this.rotation);
+
+        const newPosition = this.position.add(moveInput.multiply(this.moveSpeed * deltaTime));
+        this.setPosition(newPosition);
+    }
+
+    rotate(rotationInput, deltaTime) {
+        this.rotation += rotationInput * this.rotationSpeed * deltaTime;
+        this.object.rotation.z = this.rotation;
     }
 
     fire() {
