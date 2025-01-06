@@ -13,17 +13,13 @@ export default class Bullet extends CollisionObject {
     }
 
     update(deltaTime) {
-        this.setPosition(this.position.add(this.velocity.multiply(deltaTime)));
+        this.position = this.position.add(this.velocity.multiply(deltaTime));
     
         if (performance.now() - this.creationTime > this.lifetime) {
             this.destroy();
         }
 
-        // GameScene.instance.asteroids.forEach(asteroid => {
-        //     if (this.checkCollision(asteroid)) {
-        //         this.asteriodHit(asteroid);
-        //     }
-        // });
+        super.update(deltaTime);
     }
 
     onCollision(otherObject) {

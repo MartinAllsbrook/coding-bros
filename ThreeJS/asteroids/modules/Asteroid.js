@@ -4,6 +4,7 @@ import Vector2D from './Vector2D.js';
 import GameScene from './GameScene.js';
 import CollisionObject from './CollisionObject.js';
 import ObjectManager from './ObjectManager.js';
+import AsteroidManager from './AsteroidManager.js';
 
 export default class Asteroid extends CollisionObject{
     constructor(startPosition, size) {        
@@ -14,7 +15,7 @@ export default class Asteroid extends CollisionObject{
 
         this.asteroidSize = size;
 
-        GameScene.instance.addAsteroid(this);
+        AsteroidManager.instance.add(this);
 
         const direction = Vector2D.normalRandom();
         direction.normalize();
@@ -22,32 +23,27 @@ export default class Asteroid extends CollisionObject{
 
         this.xBondary = 10;
         this.yBondary = 5;
+
+        console.log(`Asteroid size: ${size} value: ${this.getAstroidValue()}`);
     }
 
     update(deltaTime) {
-        let newPosition = this.position;
+        this.position = this.position.add(this.velocity.multiply(deltaTime));
 
-        const xBoundary = GameScene.instance.gameArea.width / 2;
-        const yBoundary = GameScene.instance.gameArea.height / 2;
-
-        if (newPosition.x > xBoundary || newPosition.x < -xBoundary) {
-            newPosition.x *= -1;
-        }
-        if (newPosition.y > yBoundary || newPosition.y < -yBoundary) {
-            newPosition.y *= -1;
-        }
-
-        newPosition = newPosition.add(this.velocity.multiply(deltaTime));
-
-        this.setPosition(newPosition);
+        super.update(deltaTime);
     }
 
     onCollision(otherObject) {
         this.destroy();
     }
 
+    getAstroidValue(){
+        let value = Asteroid.valueOf(this.asteroidSize);
+        return value;
+    }
+
     destroy() {
-        const numChildren = 5 - this.asteroidSize;
+        const numChildren = Asteroid.numChildren(this.asteroidSize);
 
         if (this.asteroidSize > 1) {
             for (let i = 0; i < numChildren; i++) {
@@ -55,8 +51,21 @@ export default class Asteroid extends CollisionObject{
             }
         }
 
-        ObjectManager.instance.remove(this);
+        AsteroidManager.instance.remove(this);
 
         super.destroy();
+    }
+
+    static valueOf(size){
+        let value = 1;
+        for (let i = 2; i < size + 1; i++) {
+            value *= Asteroid.numChildren(i); 
+            value += 1;
+        }
+        return value;
+    }
+
+    static numChildren(size) {
+        return 5 - size;
     }
 }

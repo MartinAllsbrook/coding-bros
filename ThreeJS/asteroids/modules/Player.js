@@ -26,7 +26,7 @@ export default class Player extends CollisionObject{
     rotationSpeed = 1;
 
     bulletSpeed = 5;
-    fireRate = 1000;
+    fireRate = 700;
 
     constructor() {
         super(new Vector2D(3, 3), 0.5, 0);
@@ -42,6 +42,8 @@ export default class Player extends CollisionObject{
             this.fire();
             this.lastFireTime = performance.now();
         }
+
+        super.update(deltaTime);
     }
 
     move(moveInput, deltaTime) {
@@ -105,7 +107,6 @@ export default class Player extends CollisionObject{
 
         // Update position
         this.position = this.position.add(this.velocity.multiply(deltaTime));
-        this.setPosition(this.position);
     }
 
     rotate(rotationInput, deltaTime) {

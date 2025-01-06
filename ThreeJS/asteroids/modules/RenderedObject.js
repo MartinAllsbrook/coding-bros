@@ -10,7 +10,39 @@ export default class RenderedObject extends GameObject {
         this.radius = radius;
 
         this.object = this.createObject(GameScene.instance.basics.scene, radius);
-        this.setPosition(this.position);
+        this.setPosition();
+    }
+
+    update(deltaTime) {
+        const xBoundary = GameScene.instance.gameArea.width / 2;
+        const yBoundary = GameScene.instance.gameArea.height / 2;
+
+        if (this.position.x > xBoundary || this.position.x < -xBoundary || this.position.y > yBoundary || this.position.y < -yBoundary) {
+            this.onOutsideBoundary();
+        }
+
+        this.setPosition();
+    }
+
+    onOutsideBoundary() {
+        const epsilon = 0.1;
+
+        const xBoundary = GameScene.instance.gameArea.width / 2; // stop calculating this every time
+        const yBoundary = GameScene.instance.gameArea.height / 2;
+
+        if (this.position.x > xBoundary) {
+            this.position.x = -xBoundary + epsilon;
+        }
+        if (this.position.x < -xBoundary) {
+            this.position.x = xBoundary - epsilon;
+        }
+        if (this.position.y > yBoundary) {
+            this.position.y = -yBoundary + epsilon;
+        }
+        if (this.position.y < -yBoundary) {
+            this.position.y = yBoundary - epsilon;
+        }
+
     }
 
     createObject(scene, radius) {
@@ -23,10 +55,9 @@ export default class RenderedObject extends GameObject {
         return object;
     }
 
-    setPosition(position) {
-        this.position = position;
-        this.object.position.x = position.x;
-        this.object.position.y = position.y;
+    setPosition() { // TODO: This should not have an argument
+        this.object.position.x = this.position.x;
+        this.object.position.y = this.position.y;
     }
 
     destroy() {

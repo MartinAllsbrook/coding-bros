@@ -29,7 +29,7 @@ export default class InputManager {
     rotate = {
         left: false,
         right: false,
-    }
+    } 
     rotationValue = 0;
     
     // Shooting
