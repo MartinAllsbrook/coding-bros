@@ -12,6 +12,7 @@ import ObjectManager from './modules/ObjectManager.js';
 import CollisionManager from './modules/CollisionManager.js';
 import InputManager from './modules/InputManager.js';
 import AsteroidManager from './modules/AsteroidManager.js';
+import MusicManager from './modules/MusicManager.js';
 
 let windowWith = window.innerWidth;
 let windowHeight = window.innerHeight;
@@ -23,6 +24,7 @@ new ObjectManager();
 new CollisionManager();
 new InputManager();
 new AsteroidManager();
+new MusicManager();
 
 // Create plaer object
 const player = new Player();

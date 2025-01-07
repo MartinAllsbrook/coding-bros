@@ -14,7 +14,7 @@ export default class GameScene {
             return;
         }
 
-        const windowToScene = 110;
+        const windowToScene = 63;
         
         this.windowArea = {
             width: window.innerWidth,
@@ -40,8 +40,8 @@ export default class GameScene {
         const scene = new THREE.Scene();
         
         // Create a camera
-        const camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 0.1, 1000 );
-        camera.position.z = 5;
+        const camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 0.1, 1000 );
+        camera.position.z = 25;
         camera.translateZ( 5 );
         
         // Create a renderer

@@ -7,6 +7,7 @@ import CollisionObject from './CollisionObject.js';
 import Bullet from './Bullet.js';
 import GameScene from './GameScene.js';
 import InputManager from './InputManager.js';
+import MusicManager from './MusicManager.js';
 
 export default class Player extends CollisionObject{
     // Movement schemes
@@ -28,10 +29,17 @@ export default class Player extends CollisionObject{
     bulletSpeed = 5;
     fireRate = 700;
 
+    engineAudio = new Audio('audio/soundFX/EngineSound.mp3');
+    fireAudio = new Audio('audio/soundFX/BasicLazerSound.mp3');
+    destroyAudio = new Audio('audio/soundFX/ShipExplosion.mp3');
+
     constructor() {
         super(new Vector2D(3, 3), 0.5, 0);
 
         this.lastFireTime = performance.now();
+
+        this.engineAudio.loop = true;
+        this.engineAudio.volume = 0.5;
     }
 
     update(deltaTime) {
@@ -60,6 +68,12 @@ export default class Player extends CollisionObject{
                 break;
             default:
                 break;
+        }
+
+        if (moveInput.magnitude() > 0 && this.engineAudio.paused) {
+            this.engineAudio.play();
+        } else if (moveInput.magnitude() <= 0 && !this.engineAudio.paused) {
+            this.engineAudio.pause();
         }
 
         this.physicsUpdate(moveInput, deltaTime);
@@ -115,12 +129,19 @@ export default class Player extends CollisionObject{
     }
 
     fire() {
+        // Create bullet
         const direction = Vector2D.fromAngle(this.rotation);
-
         const bullet = new Bullet(this.position, direction.multiply(this.bulletSpeed));
-
-        console.log(this.rotation)
         GameScene.instance.addBullet(bullet);
+
+        // Play fire sounds
+        this.fireAudio.playbackRate = 1 + Math.random() * 0.2 - 0.1;
+        this.fireAudio.preservesPitch = false;
+        if (!this.fireAudio.ended){
+            this.fireAudio.pause();
+            this.fireAudio.currentTime = 0;
+        }
+        this.fireAudio.play();
     }
 
     createObject(scene, radius) {
@@ -150,5 +171,14 @@ export default class Player extends CollisionObject{
         console.log('Game Over');
 
         this.destroy();
+    }
+
+    destroy() {
+        this.engineAudio.pause();
+        this.destroyAudio.play();
+
+        MusicManager.instance.playSong("GameOver");
+
+        super.destroy();
     }
 } 

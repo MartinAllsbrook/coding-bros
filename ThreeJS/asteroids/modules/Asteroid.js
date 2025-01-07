@@ -7,6 +7,8 @@ import ObjectManager from './ObjectManager.js';
 import AsteroidManager from './AsteroidManager.js';
 
 export default class Asteroid extends CollisionObject{
+    explosionSound = new Audio('audio/soundFX/AsteroidExplosion.mp3');
+
     constructor(startPosition, size) {        
         const maxSpeed = 4 - size;
         const radius = size / 4;
@@ -43,6 +45,8 @@ export default class Asteroid extends CollisionObject{
     }
 
     destroy() {
+        this.explosionSound.play();
+
         const numChildren = Asteroid.numChildren(this.asteroidSize);
 
         if (this.asteroidSize > 1) {
