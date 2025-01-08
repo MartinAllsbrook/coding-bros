@@ -2,11 +2,15 @@ import AudioSource from "./AudioSource.js";
 
 /* ### This file is untested ### */
 export default class SoundFXSource extends AudioSource {
+    static subfolder = 'soundFX';
+    static soundFXVolume = 1;
+
     constructor(filename, looping, volume) { // Need to sort out how we imput the volume and other settings
-        super('soundFX', filename);
+        volume *= SoundFXSource.soundFXVolume;
+
+        super(subfolder, filename, volume);
 
         this.audio.loop = looping;
-        this.audio.volume = volume;
         this.audio.preservesPitch = false;
     }
 

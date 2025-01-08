@@ -30,9 +30,9 @@ export default class Player extends CollisionObject{
     bulletSpeed = 5;
     fireRate = 700;
 
-    engineAudio = new SoundFXSource('EngineAudio', true, 0.5);
-    fireAudio = new Audio('audio/soundFX/BasicLazerSound.mp3');
-    destroyAudio = new Audio('audio/soundFX/ShipExplosion.mp3');
+    engineAudio = new SoundFXSource('EngineSound', true, 0.5);
+    fireAudio = new SoundFXSource('BasicLaserSound', false, 1);
+    destroyAudio = new SoundFXSource('ShipExplosion', false, 1);
 
     constructor() {
         super(new Vector2D(3, 3), 0.5, 0);
@@ -133,13 +133,7 @@ export default class Player extends CollisionObject{
         GameScene.instance.addBullet(bullet);
 
         // Play fire sounds
-        this.fireAudio.playbackRate = 1 + Math.random() * 0.2 - 0.1;
-        this.fireAudio.preservesPitch = false;
-        if (!this.fireAudio.ended){
-            this.fireAudio.pause();
-            this.fireAudio.currentTime = 0;
-        }
-        this.fireAudio.play();
+        this.fireAudio.playWithRandomPitch(0.1);
     }
 
     createObject(scene, radius) {
@@ -173,7 +167,7 @@ export default class Player extends CollisionObject{
 
     destroy() {
         this.engineAudio.pauseIfPlaying();
-        this.destroyAudio.play();
+        this.destroyAudio.playFromStart();
 
         MusicManager.instance.playSong("GameOver");
 

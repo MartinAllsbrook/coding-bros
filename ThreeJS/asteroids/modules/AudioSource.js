@@ -1,9 +1,15 @@
 /* ### This file is untested ### */
 export default class AudioSource {
-	constructor(subfolder, filename) {
+	static basePath = './audio/';
+
+	static masterVolume = 1;
+
+	constructor(subfolder, filename, volume) {
 		this.path = this.createPath(subfolder, filename);
 
 		this.audio = new Audio(this.path);
+
+		this.audio.volume = AudioSource.masterVolume * volume;
 	}
 
 	playFromStart() {
@@ -24,6 +30,6 @@ export default class AudioSource {
 	}
 
 	createPath(subfolder, filename) {
-		return `./assets/audio/${subfolder}/${filename}.mp4`;
+		return `${basePath}${subfolder}/${filename}.mp3`;
 	}
 }
