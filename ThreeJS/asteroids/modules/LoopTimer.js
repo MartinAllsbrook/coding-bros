@@ -1,4 +1,4 @@
-// USed fo rtiming how long it takes for each loop to run
+// USed for timing how long it takes for each loop to run
 export default class LoopTimer {
     constructor(displayElement, name) {
         this._time = 0;
