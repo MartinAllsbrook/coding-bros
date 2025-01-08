@@ -8,6 +8,7 @@ import Bullet from './Bullet.js';
 import GameScene from './GameScene.js';
 import InputManager from './InputManager.js';
 import MusicManager from './MusicManager.js';
+import SoundFXSource from './SoundFXSource.js';
 
 export default class Player extends CollisionObject{
     // Movement schemes
@@ -29,7 +30,7 @@ export default class Player extends CollisionObject{
     bulletSpeed = 5;
     fireRate = 700;
 
-    engineAudio = new Audio('audio/soundFX/EngineSound.mp3');
+    engineAudio = new SoundFXSource('EngineAudio', true, 0.5);
     fireAudio = new Audio('audio/soundFX/BasicLazerSound.mp3');
     destroyAudio = new Audio('audio/soundFX/ShipExplosion.mp3');
 
@@ -37,9 +38,6 @@ export default class Player extends CollisionObject{
         super(new Vector2D(3, 3), 0.5, 0);
 
         this.lastFireTime = performance.now();
-
-        this.engineAudio.loop = true;
-        this.engineAudio.volume = 0.5;
     }
 
     update(deltaTime) {
@@ -70,10 +68,10 @@ export default class Player extends CollisionObject{
                 break;
         }
 
-        if (moveInput.magnitude() > 0 && this.engineAudio.paused) {
-            this.engineAudio.play();
-        } else if (moveInput.magnitude() <= 0 && !this.engineAudio.paused) {
-            this.engineAudio.pause();
+        if (moveInput.magnitude() > 0) {
+            this.engineAudio.playIfPaused();
+        } else if (moveInput.magnitude() <= 0) {
+            this.engineAudio.pauseIfPlaying();
         }
 
         this.physicsUpdate(moveInput, deltaTime);
@@ -174,7 +172,7 @@ export default class Player extends CollisionObject{
     }
 
     destroy() {
-        this.engineAudio.pause();
+        this.engineAudio.pauseIfPlaying();
         this.destroyAudio.play();
 
         MusicManager.instance.playSong("GameOver");
