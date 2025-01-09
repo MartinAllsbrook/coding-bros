@@ -30,6 +30,6 @@ export default class AudioSource {
 	}
 
 	createPath(subfolder, filename) {
-		return `${basePath}${subfolder}/${filename}.mp3`;
+		return `${AudioSource.basePath}${subfolder}/${filename}.mp3`;
 	}
 }

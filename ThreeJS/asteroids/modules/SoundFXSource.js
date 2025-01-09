@@ -8,7 +8,7 @@ export default class SoundFXSource extends AudioSource {
     constructor(filename, looping, volume) { // Need to sort out how we imput the volume and other settings
         volume *= SoundFXSource.soundFXVolume;
 
-        super(subfolder, filename, volume);
+        super(SoundFXSource.subfolder, filename, volume);
 
         this.audio.loop = looping;
         this.audio.preservesPitch = false;
