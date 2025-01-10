@@ -1,9 +1,23 @@
-/* ### This file is untested ### */
+import Settings from "./Settings.js";
+
 export default class AudioSource {
-	constructor(subfolder, filename) {
+	static basePath = './audio/';
+
+	static masterVolume = 1;
+
+	constructor(subfolder, filename, volume) {
 		this.path = this.createPath(subfolder, filename);
 
 		this.audio = new Audio(this.path);
+
+		this.volume = volume;
+		this.audio.volume = AudioSource.masterVolume * volume;
+
+		Settings.instance.audioSettings.masterVolume.subscribe((newValue) => {
+			console.log(newValue);
+			AudioSource.masterVolume = newValue; 
+			this.updateVolume();
+		});
 	}
 
 	playFromStart() {
@@ -24,6 +38,10 @@ export default class AudioSource {
 	}
 
 	createPath(subfolder, filename) {
-		return `./assets/audio/${subfolder}/${filename}.mp4`;
+		return `${AudioSource.basePath}${subfolder}/${filename}.mp3`;
+	}
+
+	// TODO: This needs to be done better
+	updateVolume(){
 	}
 }

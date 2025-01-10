@@ -13,11 +13,13 @@ import CollisionManager from './modules/CollisionManager.js';
 import InputManager from './modules/InputManager.js';
 import AsteroidManager from './modules/AsteroidManager.js';
 import MusicManager from './modules/MusicManager.js';
+import Settings from './modules/Settings.js';
 
 let windowWith = window.innerWidth;
 let windowHeight = window.innerHeight;
 
 // Create singletons
+new Settings(document.getElementById('settings'));
 new GameScene();
 new Scoreboard(document.getElementById('scoreboard'));
 new ObjectManager();
