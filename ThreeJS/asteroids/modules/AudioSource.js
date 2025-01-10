@@ -1,4 +1,5 @@
-/* ### This file is untested ### */
+import Settings from "./Settings.js";
+
 export default class AudioSource {
 	static basePath = './audio/';
 
@@ -9,7 +10,14 @@ export default class AudioSource {
 
 		this.audio = new Audio(this.path);
 
+		this.volume = volume;
 		this.audio.volume = AudioSource.masterVolume * volume;
+
+		Settings.instance.audioSettings.masterVolume.subscribe((newValue) => {
+			console.log(newValue);
+			AudioSource.masterVolume = newValue; 
+			this.updateVolume();
+		});
 	}
 
 	playFromStart() {
@@ -31,5 +39,9 @@ export default class AudioSource {
 
 	createPath(subfolder, filename) {
 		return `${AudioSource.basePath}${subfolder}/${filename}.mp3`;
+	}
+
+	// TODO: This needs to be done better
+	updateVolume(){
 	}
 }

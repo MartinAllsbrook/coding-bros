@@ -1,10 +1,14 @@
+import MusicSource from "./MusicSource.js";
+
 export default class MusicManager {
     static instance = null;
     
-    gameOverSong = new Audio('./audio/music/GameOver.mp3');
-    SpaceFighterLoop = new Audio('./audio/music/Space Fighter Loop.mp3');
+    gameOverSong = new MusicSource('GameOver');
+    SpaceFighterLoop = new MusicSource('Space Fighter Loop');
 
     currentSong = null;
+
+    musicStarted = false;
 
     constructor() {
         if(MusicManager.instance == null){
@@ -20,22 +24,26 @@ export default class MusicManager {
     }
 
     startMusic(){
+        if(this.musicStarted){
+            return;
+        }
+        this.musicStarted = true;
         this.playSong('SpaceFighterLoop');
     }
 
     playSong(song){
         if(this.currentSong != null){
-            this.currentSong.pause();
+            this.currentSong.pauseIfPlaying();
         }
 
         if (song == 'GameOver'){
-            this.gameOverSong.play();
+            this.gameOverSong.playFromStart();
             this.gameOverSong.loop = true;
             this.currentSong = this.gameOverSong;
         }
 
         if (song == 'SpaceFighterLoop'){
-            this.SpaceFighterLoop.play();
+            this.SpaceFighterLoop.playFromStart();
             this.SpaceFighterLoop.volume = 0.5;
             this.SpaceFighterLoop.loop = true;
             this.currentSong = this.SpaceFighterLoop;
