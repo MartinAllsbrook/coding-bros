@@ -18,6 +18,8 @@ import Settings from './modules/Settings.js';
 let windowWith = window.innerWidth;
 let windowHeight = window.innerHeight;
 
+// get test
+
 // Create singletons
 new Settings(document.getElementById('settings'));
 new GameScene();
